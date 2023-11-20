@@ -30,9 +30,11 @@ public class BrandsController {
     }
 
     @PutMapping("{id}")
-    public void update(@RequestBody Brand brand) {
-        Brand brandUpdate = brandRepository.findById(brand.getId()).orElseThrow();
-        brandRepository.save(brandUpdate);
+    public void update(@PathVariable int id, @RequestBody Brand updateBrand) {
+        Brand brandToUpdate = brandRepository.findById(id).orElseThrow();
+        brandToUpdate.setName(updateBrand.getName());
+        brandToUpdate.setCountry(updateBrand.getCountry());
+        brandRepository.save(brandToUpdate);
     }
 
     @DeleteMapping("{id}")
