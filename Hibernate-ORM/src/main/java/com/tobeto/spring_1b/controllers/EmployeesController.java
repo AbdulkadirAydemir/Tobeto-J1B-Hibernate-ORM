@@ -29,10 +29,13 @@ public class EmployeesController {
         employeeRepository.save(employee);
     }
 
-    @PutMapping
-    public void update(@RequestBody Employee employee){
-        Employee employeeUpdate = employeeRepository.findById(employee.getId()).orElseThrow();
-        employeeRepository.save(employeeUpdate);
+    @PutMapping("{id}")
+    public void update(@PathVariable int id, @RequestBody Employee updateEmployee) {
+        Employee employeeToUpdate = employeeRepository.findById(id).orElseThrow();
+        employeeToUpdate.setFirstName(updateEmployee.getFirstName());
+        employeeToUpdate.setLastName(updateEmployee.getLastName());
+        employeeToUpdate.setBirthDate(updateEmployee.getBirthDate());
+        employeeRepository.save(employeeToUpdate);
     }
 
     @DeleteMapping("{id}")
