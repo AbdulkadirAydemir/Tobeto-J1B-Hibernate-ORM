@@ -29,10 +29,15 @@ public class CarsController {
         carRepository.save(car);
     }
 
-    @PutMapping
-    public void update(@RequestBody Car car) {
-        Car carUpdate = carRepository.findById(car.getId()).orElseThrow();
-        carRepository.save(carUpdate);
+    @PutMapping("{id}")
+    public void update(@PathVariable int id, @RequestBody Car updateCar) {
+        Car carToUpdate = carRepository.findById(id).orElseThrow();
+        carToUpdate.setName(updateCar.getName());
+        carToUpdate.setModel(updateCar.getModel());
+        carToUpdate.setYear(updateCar.getYear());
+        carToUpdate.setReadyToUse(updateCar.isReadyToUse());
+        carToUpdate.setRentalPrice(updateCar.getRentalPrice());
+        carRepository.save(carToUpdate);
     }
 
     @DeleteMapping("{id}")
