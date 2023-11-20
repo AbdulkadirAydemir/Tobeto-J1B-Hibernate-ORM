@@ -29,10 +29,13 @@ public class RentalsController {
         rentalRepository.save(rental);
     }
 
-    @PutMapping
-    public void update(@RequestBody Rental rental){
-        Rental rentalUpdate = rentalRepository.findById(rental.getId()).orElseThrow();
-        rentalRepository.save(rentalUpdate);
+    @PutMapping("{id}")
+    public void update(@PathVariable int id, @RequestBody Rental updateRental) {
+        Rental rentalToUpdate = rentalRepository.findById(id).orElseThrow();
+        rentalToUpdate.setStartDate(updateRental.getStartDate());
+        rentalToUpdate.setEndDate(updateRental.getEndDate());
+        rentalToUpdate.setTotalPrice(updateRental.getTotalPrice());
+        rentalRepository.save(rentalToUpdate);
     }
 
     @DeleteMapping("{id}")
