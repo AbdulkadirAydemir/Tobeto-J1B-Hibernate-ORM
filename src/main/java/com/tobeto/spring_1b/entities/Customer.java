@@ -1,5 +1,6 @@
 package com.tobeto.spring_1b.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,5 +41,6 @@ public class Customer {
     private String phone;
 
     @OneToMany(mappedBy = "customer")
+    @JsonIgnore
     private List<Rental> rental;
 }

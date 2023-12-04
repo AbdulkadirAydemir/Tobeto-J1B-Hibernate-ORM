@@ -1,4 +1,4 @@
-package com.tobeto.spring_1b.dtos.responses.employee;
+package com.tobeto.spring_1b.services.dtos.responses.employee;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

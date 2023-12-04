@@ -1,5 +1,6 @@
 package com.tobeto.spring_1b.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class Employee {
     private int id;
 
     @Column(name="first_name")
-    private String firsName;
+    private String firstName;
 
     @Column(name="last_name")
     private String lastName;
@@ -32,5 +33,6 @@ public class Employee {
     private Date birthDate;
 
     @OneToMany(mappedBy = "employee")
+    @JsonIgnore
     private List<Rental> rental;
 }

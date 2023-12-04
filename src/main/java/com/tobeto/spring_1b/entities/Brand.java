@@ -1,5 +1,6 @@
 package com.tobeto.spring_1b.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,6 +29,6 @@ public class Brand {
     private String country;
 
     @OneToMany(mappedBy = "brand")
+    @JsonIgnore
     private List<Car> cars;
-
 }

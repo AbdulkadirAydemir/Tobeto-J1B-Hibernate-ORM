@@ -1,4 +1,4 @@
-package com.tobeto.spring_1b.dtos.requests.brand;
+package com.tobeto.spring_1b.services.dtos.requests.brand;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

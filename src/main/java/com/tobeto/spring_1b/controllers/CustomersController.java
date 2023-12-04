@@ -1,43 +1,65 @@
 package com.tobeto.spring_1b.controllers;
 
 import com.tobeto.spring_1b.entities.Customer;
-import com.tobeto.spring_1b.repositories.CustomerRepository;
+import com.tobeto.spring_1b.services.abstracts.CustomerService;
+import com.tobeto.spring_1b.services.dtos.requests.customer.AddCustomerRequest;
+import com.tobeto.spring_1b.services.dtos.requests.customer.UpdateCustomerRequest;
+import com.tobeto.spring_1b.services.dtos.responses.customer.GetCustomerListResponse;
+import com.tobeto.spring_1b.services.dtos.responses.customer.GetCustomerResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("api/customers")
+@AllArgsConstructor
 public class CustomersController {
 
-    private final CustomerRepository customerRepository;
-
-    public CustomersController(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-    }
+    private final CustomerService customerService;
 
     @GetMapping
-    public List<Customer> getAll() {return customerRepository.findAll();}
+    public List<GetCustomerListResponse> getAll() {
+        return customerService.getAll();
+    }
 
     @GetMapping("{id}")
-    public Customer getById(@PathVariable int id){
-        return customerRepository.findById(id).orElseThrow();
+    public GetCustomerResponse getById(@PathVariable int id){
+       return customerService.getById(id);
+    }
+
+    @GetMapping("name")
+    public List<GetCustomerListResponse> getByFullName(@RequestParam String name, @RequestParam String surname){
+        return this.customerService.getByFullName(name,surname);
+    }
+
+    @GetMapping("address")
+    public List<GetCustomerListResponse> getByAddress(@RequestParam String address){
+        return this.customerService.getByAddress(address);
+    }
+
+    @GetMapping("search")
+    public List<Customer> search(@RequestParam String name, @RequestParam String surname){
+        return this.customerService.search(name,surname);
+    }
+
+    @GetMapping("search/address")
+    public List<Customer> searchAddress(@RequestParam String address){
+        return this.customerService.searchAddress(address);
     }
 
     @PostMapping
-    public void add(@RequestBody Customer customer) {
-        customerRepository.save(customer);
+    public void add(@RequestBody AddCustomerRequest request) {
+        customerService.add(request);
     }
 
-    @PutMapping
-    public void update(@RequestBody Customer customer) {
-        Customer customerUpdate = customerRepository.findById(customer.getId()).orElseThrow();
-        customerRepository.save(customerUpdate);
+    @PutMapping("{id}")
+    public void update(@PathVariable int id, @RequestBody UpdateCustomerRequest updateCustomerRequest) {
+        customerService.update(id, updateCustomerRequest);
     }
 
     @DeleteMapping("{id}")
     public void delete(@PathVariable int id){
-        Customer customerToDelete = customerRepository.findById(id).orElseThrow();
-        customerRepository.delete(customerToDelete);
+       customerService.delete(id);
     }
 }

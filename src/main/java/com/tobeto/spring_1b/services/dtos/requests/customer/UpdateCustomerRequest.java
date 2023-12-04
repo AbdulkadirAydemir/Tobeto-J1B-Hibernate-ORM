@@ -1,4 +1,4 @@
-package com.tobeto.spring_1b.dtos.requests.customer;
+package com.tobeto.spring_1b.services.dtos.requests.customer;
 
 import lombok.Data;
 

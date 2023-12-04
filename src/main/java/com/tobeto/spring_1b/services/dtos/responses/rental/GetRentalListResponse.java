@@ -1,4 +1,4 @@
-package com.tobeto.spring_1b.dtos.responses.rental;
+package com.tobeto.spring_1b.services.dtos.responses.rental;
 
 import lombok.Data;
 

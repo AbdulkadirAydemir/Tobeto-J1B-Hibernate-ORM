@@ -1,4 +1,4 @@
-package com.tobeto.spring_1b.dtos.requests.car;
+package com.tobeto.spring_1b.services.dtos.requests.car;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
