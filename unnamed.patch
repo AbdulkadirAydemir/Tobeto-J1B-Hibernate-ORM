@@ -1,0 +1,90 @@
+Index: src/main/java/com/tobeto/spring_1b/repositories/BrandRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/repositories/BrandRepository.java b/src/main/java/com/tobeto/spring_1b/repositories/BrandRepository.java
+--- a/src/main/java/com/tobeto/spring_1b/repositories/BrandRepository.java	(revision 5c696f5ddaf22108910bbf593f3cce5bd7490dbe)
++++ b/src/main/java/com/tobeto/spring_1b/repositories/BrandRepository.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
+@@ -2,6 +2,21 @@
+ 
+ import com.tobeto.spring_1b.entities.Brand;
+ import org.springframework.data.jpa.repository.JpaRepository;
++import org.springframework.data.jpa.repository.Query;
++
++import java.util.List;
+ 
+ public interface BrandRepository extends JpaRepository<Brand, Integer> {
++
++    // Derived Query Methods
++
++    List<Brand> findByNameContaining(String name);
++    List<Brand> findByCountryStartingWith(String country);
++
++    // JPQL
++
++    @Query("SELECT b FROM Brand b Where b.name LIKE %:name%")
++    List<Brand> search(String name);
++    @Query("SELECT b FROM Brand b Where b.country LIKE :country%")
++    List<Brand> search1(String country);
+ }
+Index: src/main/java/com/tobeto/spring_1b/repositories/CarRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/repositories/CarRepository.java b/src/main/java/com/tobeto/spring_1b/repositories/CarRepository.java
+--- a/src/main/java/com/tobeto/spring_1b/repositories/CarRepository.java	(revision 5c696f5ddaf22108910bbf593f3cce5bd7490dbe)
++++ b/src/main/java/com/tobeto/spring_1b/repositories/CarRepository.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
+@@ -2,6 +2,21 @@
+ 
+ import com.tobeto.spring_1b.entities.Car;
+ import org.springframework.data.jpa.repository.JpaRepository;
++import org.springframework.data.jpa.repository.Query;
++
++import java.util.List;
+ 
+ public interface CarRepository extends JpaRepository<Car, Integer>{
++
++    // Derived Query Methods
++
++    List<Car> findByNameLike(String name);
++    List<Car> findByYearBetween(int year);
++
++    // JPQL
++
++    @Query("SELECT c FROM Car c Where c.name LIKE %:name%")
++    List<Car> search(String name);
++    @Query("SELECT c FROM Car c Where EXTRACT(YEAR FROM \":year\") = 2023;")
++    List<Car> searchYear(int year);
+ }
+Index: src/main/java/com/tobeto/spring_1b/repositories/CustomerRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/repositories/CustomerRepository.java b/src/main/java/com/tobeto/spring_1b/repositories/CustomerRepository.java
+--- a/src/main/java/com/tobeto/spring_1b/repositories/CustomerRepository.java	(revision 5c696f5ddaf22108910bbf593f3cce5bd7490dbe)
++++ b/src/main/java/com/tobeto/spring_1b/repositories/CustomerRepository.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
+@@ -2,6 +2,21 @@
+ 
+ import com.tobeto.spring_1b.entities.Customer;
+ import org.springframework.data.jpa.repository.JpaRepository;
++import org.springframework.data.jpa.repository.Query;
++
++import java.util.List;
+ 
+ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
++
++    // Derived Query Methods
++
++    List<Customer> findDistinctNameAndSurname(String name ,String surname);
++    List<Customer> findByAddressLike(String address);
++
++    // JPQL
++
++    @Query("SELECT DISTINCT c.name, c.surname FROM Customer c;")
++    List<Customer> search(String name, String surname);
++    @Query("SELECT c FROM Customer c Where c.address LIKE %:address%")
++    List<Customer> searchAddress(String address);
+ }

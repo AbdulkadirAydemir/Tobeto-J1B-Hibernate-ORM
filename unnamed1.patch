@@ -1,0 +1,1565 @@
+Index: src/main/java/com/tobeto/spring_1b/controllers/BrandsController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/controllers/BrandsController.java b/src/main/java/com/tobeto/spring_1b/controllers/BrandsController.java
+--- a/src/main/java/com/tobeto/spring_1b/controllers/BrandsController.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/controllers/BrandsController.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,43 +1,67 @@
+ package com.tobeto.spring_1b.controllers;
+ 
+ import com.tobeto.spring_1b.entities.Brand;
+-import com.tobeto.spring_1b.repositories.BrandRepository;
++import com.tobeto.spring_1b.services.abstracts.BrandService;
++import com.tobeto.spring_1b.services.dtos.requests.brand.AddBrandRequest;
++import com.tobeto.spring_1b.services.dtos.requests.brand.UpdateBrandRequest;
++import com.tobeto.spring_1b.services.dtos.responses.brand.GetBrandListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.brand.GetBrandResponse;
++import lombok.AllArgsConstructor;
+ import org.springframework.web.bind.annotation.*;
+ 
+ import java.util.List;
+ 
+ @RestController
+ @RequestMapping("api/brands")
++@AllArgsConstructor
+ public class BrandsController {
+ 
+-    private final BrandRepository brandRepository;
+-
+-    public BrandsController(BrandRepository brandRepository) {
+-        this.brandRepository = brandRepository;
+-    }
++    private final BrandService brandService;
+ 
+     @GetMapping
+-    public List<Brand> getAll() {return brandRepository.findAll();}
++    public List<GetBrandListResponse> getAll() {
++        return brandService.getAll();
++    }
+ 
+     @GetMapping("{id}")
+-    public Brand getById(@PathVariable int id) {
+-        return brandRepository.findById(id).orElseThrow();
++    public GetBrandResponse getById(@PathVariable int id) {
++        return brandService.getById(id);
++    }
++
++    @GetMapping("name")
++    public List<GetBrandListResponse> getByName(@RequestParam String name)
++    {
++        return this.brandService.getByName(name);
++    }
++
++    @GetMapping("country")
++    public List<GetBrandListResponse> getByCountry(@RequestParam String country)
++    {
++        return this.brandService.getByCountry(country);
++    }
++
++    @GetMapping("search")
++    public List<Brand> search(@RequestParam String name){
++        return this.brandService.search(name);
++    }
++
++    @GetMapping("search/country")
++    public List<Brand> search1(@RequestParam String country){
++        return this.brandService.search1(country);
+     }
+ 
+     @PostMapping
+-    public void add(@RequestBody  Brand brand){
+-        brandRepository.save(brand);
++    public void add(@RequestBody AddBrandRequest request){
++        brandService.add(request);
+     }
+ 
+     @PutMapping("{id}")
+-    public void update(@RequestBody Brand brand) {
+-        Brand brandUpdate = brandRepository.findById(brand.getId()).orElseThrow();
+-        brandRepository.save(brandUpdate);
++    public void update(@PathVariable int id, @RequestBody UpdateBrandRequest updateBrandRequest) {
++        brandService.update(id,updateBrandRequest);
+     }
+ 
+     @DeleteMapping("{id}")
+     public void delete(@PathVariable int id) {
+-        Brand brandToDelete = brandRepository.findById(id).orElseThrow();
+-        brandRepository.delete(brandToDelete);
++       brandService.delete(id);
+     }
+ }
+\ No newline at end of file
+Index: src/main/java/com/tobeto/spring_1b/controllers/CarsController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/controllers/CarsController.java b/src/main/java/com/tobeto/spring_1b/controllers/CarsController.java
+--- a/src/main/java/com/tobeto/spring_1b/controllers/CarsController.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/controllers/CarsController.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,43 +1,65 @@
+ package com.tobeto.spring_1b.controllers;
+ 
+ import com.tobeto.spring_1b.entities.Car;
+-import com.tobeto.spring_1b.repositories.CarRepository;
++import com.tobeto.spring_1b.services.abstracts.CarService;
++import com.tobeto.spring_1b.services.dtos.requests.car.AddCarRequest;
++import com.tobeto.spring_1b.services.dtos.requests.car.UpdateCarRequest;
++import com.tobeto.spring_1b.services.dtos.responses.car.GetCarListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.car.GetCarResponse;
++import lombok.AllArgsConstructor;
+ import org.springframework.web.bind.annotation.*;
+ 
+ import java.util.List;
+ 
+ @RestController
+ @RequestMapping("api/cars")
++@AllArgsConstructor
+ public class CarsController {
+ 
+-    private final CarRepository carRepository;
+-
+-    public CarsController(CarRepository carRepository) {
+-        this.carRepository = carRepository;
+-    }
++    private final CarService carService;
+ 
+     @GetMapping
+-    public List<Car> getAll() {return carRepository.findAll();}
++    public List<GetCarListResponse> getAll() {
++      return carService.getAll();
++    }
+ 
+     @GetMapping("{id}")
+-    public Car getById(@PathVariable int id) {
+-        return carRepository.findById(id).orElseThrow();
++    public GetCarResponse getById(@PathVariable int id) {
++        return carService.getById(id);
++    }
++
++    @GetMapping("name")
++    public List<GetCarListResponse> getByName(@RequestParam String name) {
++        return this.carService.getByName(name);
++    }
++
++    @GetMapping("year")
++    public List<GetCarListResponse> getByYear(@RequestParam int year){
++        return this.carService.getByYear(year);
++    }
++
++    @GetMapping("search")
++    public List<Car> search(@RequestParam String name){
++        return this.carService.search(name);
++    }
++
++    @GetMapping("search/year")
++    public List<Car> searchYear(@RequestParam int year){
++        return this.carService.searchYear(year);
+     }
+ 
+     @PostMapping
+-    public void add(@RequestBody Car car){
+-        carRepository.save(car);
++    public void add(@RequestBody AddCarRequest request){
++        carService.add(request);
+     }
+ 
+-    @PutMapping
+-    public void update(@RequestBody Car car) {
+-        Car carUpdate = carRepository.findById(car.getId()).orElseThrow();
+-        carRepository.save(carUpdate);
++    @PutMapping("{id}")
++    public void update(@PathVariable int id, @RequestBody UpdateCarRequest updateCarRequest) {
++        carService.update(id, updateCarRequest);
+     }
+ 
+     @DeleteMapping("{id}")
+     public void delete(@PathVariable int id) {
+-        Car carToDelete = carRepository.findById(id).orElseThrow();
+-        carRepository.delete(carToDelete);
++        carService.delete(id);
+     }
+ }
+\ No newline at end of file
+Index: src/main/java/com/tobeto/spring_1b/controllers/CustomersController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/controllers/CustomersController.java b/src/main/java/com/tobeto/spring_1b/controllers/CustomersController.java
+--- a/src/main/java/com/tobeto/spring_1b/controllers/CustomersController.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/controllers/CustomersController.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,43 +1,65 @@
+ package com.tobeto.spring_1b.controllers;
+ 
+ import com.tobeto.spring_1b.entities.Customer;
+-import com.tobeto.spring_1b.repositories.CustomerRepository;
++import com.tobeto.spring_1b.services.abstracts.CustomerService;
++import com.tobeto.spring_1b.services.dtos.requests.customer.AddCustomerRequest;
++import com.tobeto.spring_1b.services.dtos.requests.customer.UpdateCustomerRequest;
++import com.tobeto.spring_1b.services.dtos.responses.customer.GetCustomerListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.customer.GetCustomerResponse;
++import lombok.AllArgsConstructor;
+ import org.springframework.web.bind.annotation.*;
+ 
+ import java.util.List;
+ 
+ @RestController
+ @RequestMapping("api/customers")
++@AllArgsConstructor
+ public class CustomersController {
+ 
+-    private final CustomerRepository customerRepository;
+-
+-    public CustomersController(CustomerRepository customerRepository) {
+-        this.customerRepository = customerRepository;
+-    }
++    private final CustomerService customerService;
+ 
+     @GetMapping
+-    public List<Customer> getAll() {return customerRepository.findAll();}
++    public List<GetCustomerListResponse> getAll() {
++        return customerService.getAll();
++    }
+ 
+     @GetMapping("{id}")
+-    public Customer getById(@PathVariable int id){
+-        return customerRepository.findById(id).orElseThrow();
++    public GetCustomerResponse getById(@PathVariable int id){
++       return customerService.getById(id);
++    }
++
++    @GetMapping("name")
++    public List<GetCustomerListResponse> getByFullName(@RequestParam String name, @RequestParam String surname){
++        return this.customerService.getByFullName(name,surname);
++    }
++
++    @GetMapping("address")
++    public List<GetCustomerListResponse> getByAddress(@RequestParam String address){
++        return this.customerService.getByAddress(address);
++    }
++
++    @GetMapping("search")
++    public List<Customer> search(@RequestParam String name, @RequestParam String surname){
++        return this.customerService.search(name,surname);
++    }
++
++    @GetMapping("search/address")
++    public List<Customer> searchAddress(@RequestParam String address){
++        return this.customerService.searchAddress(address);
+     }
+ 
+     @PostMapping
+-    public void add(@RequestBody Customer customer) {
+-        customerRepository.save(customer);
++    public void add(@RequestBody AddCustomerRequest request) {
++        customerService.add(request);
+     }
+ 
+-    @PutMapping
+-    public void update(@RequestBody Customer customer) {
+-        Customer customerUpdate = customerRepository.findById(customer.getId()).orElseThrow();
+-        customerRepository.save(customerUpdate);
++    @PutMapping("{id}")
++    public void update(@PathVariable int id, @RequestBody UpdateCustomerRequest updateCustomerRequest) {
++        customerService.update(id, updateCustomerRequest);
+     }
+ 
+     @DeleteMapping("{id}")
+     public void delete(@PathVariable int id){
+-        Customer customerToDelete = customerRepository.findById(id).orElseThrow();
+-        customerRepository.delete(customerToDelete);
++       customerService.delete(id);
+     }
+ }
+\ No newline at end of file
+Index: src/main/java/com/tobeto/spring_1b/controllers/EmployeesController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/controllers/EmployeesController.java b/src/main/java/com/tobeto/spring_1b/controllers/EmployeesController.java
+--- a/src/main/java/com/tobeto/spring_1b/controllers/EmployeesController.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/controllers/EmployeesController.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,43 +1,44 @@
+ package com.tobeto.spring_1b.controllers;
+ 
+-import com.tobeto.spring_1b.entities.Employee;
+-import com.tobeto.spring_1b.repositories.EmployeeRepository;
++import com.tobeto.spring_1b.services.abstracts.EmployeeService;
++import com.tobeto.spring_1b.services.dtos.requests.employee.AddEmployeeRequest;
++import com.tobeto.spring_1b.services.dtos.requests.employee.UpdateEmployeeRequest;
++import com.tobeto.spring_1b.services.dtos.responses.employee.GetEmployeeListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.employee.GetEmployeeResponse;
++import lombok.AllArgsConstructor;
+ import org.springframework.web.bind.annotation.*;
+ 
+ import java.util.List;
+ 
+ @RestController
+ @RequestMapping("api/employees")
++@AllArgsConstructor
+ public class EmployeesController {
+ 
+-    private final EmployeeRepository employeeRepository;
+-
+-    public EmployeesController(EmployeeRepository employeeRepository) {
+-        this.employeeRepository = employeeRepository;
+-    }
++    private final EmployeeService employeeService;
+ 
+     @GetMapping
+-    public List<Employee> getAll(){return employeeRepository.findAll();}
++    public List<GetEmployeeListResponse> getAll(){
++        return employeeService.getAll();
++    }
+ 
+     @GetMapping("{id}")
+-    public Employee getById(@PathVariable int id){
+-        return employeeRepository.findById(id).orElseThrow();
++    public GetEmployeeResponse getById(@PathVariable int id){
++       return employeeService.getById(id);
+     }
+ 
+     @PostMapping
+-    public void add(@RequestBody Employee employee){
+-        employeeRepository.save(employee);
++    public void add(@RequestBody AddEmployeeRequest request){
++        employeeService.add(request);
+     }
+ 
+-    @PutMapping
+-    public void update(@RequestBody Employee employee){
+-        Employee employeeUpdate = employeeRepository.findById(employee.getId()).orElseThrow();
+-        employeeRepository.save(employeeUpdate);
++    @PutMapping("{id}")
++    public void update(@PathVariable int id, @RequestBody UpdateEmployeeRequest updateEmployeeRequest) {
++        employeeService.update(id, updateEmployeeRequest);
+     }
+ 
+     @DeleteMapping("{id}")
+     public void deleteToId(@PathVariable int id){
+-        Employee employeeToDelete = employeeRepository.findById(id).orElseThrow();
+-        employeeRepository.delete(employeeToDelete);
++       employeeService.delete(id);
+     }
+ }
+\ No newline at end of file
+Index: src/main/java/com/tobeto/spring_1b/controllers/RentalsController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/controllers/RentalsController.java b/src/main/java/com/tobeto/spring_1b/controllers/RentalsController.java
+--- a/src/main/java/com/tobeto/spring_1b/controllers/RentalsController.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/controllers/RentalsController.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,43 +1,44 @@
+ package com.tobeto.spring_1b.controllers;
+ 
+-import com.tobeto.spring_1b.entities.Rental;
+-import com.tobeto.spring_1b.repositories.RentalRepository;
++import com.tobeto.spring_1b.services.abstracts.RentalService;
++import com.tobeto.spring_1b.services.dtos.requests.rental.AddRentalRequest;
++import com.tobeto.spring_1b.services.dtos.requests.rental.UpdateRentalRequest;
++import com.tobeto.spring_1b.services.dtos.responses.rental.GetRentalListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.rental.GetRentalResponse;
++import lombok.AllArgsConstructor;
+ import org.springframework.web.bind.annotation.*;
+ 
+ import java.util.List;
+ 
+ @RestController
+ @RequestMapping("api/rentals")
++@AllArgsConstructor
+ public class RentalsController {
+ 
+-    private final RentalRepository rentalRepository;
+-
+-    public RentalsController(RentalRepository rentalRepository) {
+-        this.rentalRepository = rentalRepository;
+-    }
++    private final RentalService rentalService;
+ 
+     @GetMapping
+-    public List<Rental> getAll(){return rentalRepository.findAll();}
++    public List<GetRentalListResponse> getAll(){
++        return rentalService.getAll();
++    }
+ 
+     @GetMapping("{id}")
+-    public Rental getById(@PathVariable int id){
+-        return  rentalRepository.findById(id).orElseThrow();
++    public GetRentalResponse getById(@PathVariable int id){
++        return rentalService.getById(id);
+     }
+ 
+     @PostMapping
+-    public void add(@RequestBody Rental rental){
+-        rentalRepository.save(rental);
++    public void add(@RequestBody AddRentalRequest request){
++        rentalService.add(request);
+     }
+ 
+-    @PutMapping
+-    public void update(@RequestBody Rental rental){
+-        Rental rentalUpdate = rentalRepository.findById(rental.getId()).orElseThrow();
+-        rentalRepository.save(rentalUpdate);
++    @PutMapping("{id}")
++    public void update(@PathVariable int id, @RequestBody UpdateRentalRequest updateRentalRequest) {
++        rentalService.update(id, updateRentalRequest);
+     }
+ 
+     @DeleteMapping("{id}")
+     public void deleteToId(@PathVariable int id){
+-        Rental rentalToDelete = rentalRepository.findById(id).orElseThrow();
+-        rentalRepository.delete(rentalToDelete);
++        rentalService.delete(id);
+     }
+ }
+\ No newline at end of file
+Index: src/main/java/com/tobeto/spring_1b/entities/Brand.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/entities/Brand.java b/src/main/java/com/tobeto/spring_1b/entities/Brand.java
+--- a/src/main/java/com/tobeto/spring_1b/entities/Brand.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/entities/Brand.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,5 +1,6 @@
+ package com.tobeto.spring_1b.entities;
+ 
++import com.fasterxml.jackson.annotation.JsonIgnore;
+ import jakarta.persistence.*;
+ import lombok.AllArgsConstructor;
+ import lombok.Getter;
+@@ -28,6 +29,6 @@
+     private String country;
+ 
+     @OneToMany(mappedBy = "brand")
++    @JsonIgnore
+     private List<Car> cars;
+-
+ }
+Index: src/main/java/com/tobeto/spring_1b/entities/Car.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/entities/Car.java b/src/main/java/com/tobeto/spring_1b/entities/Car.java
+--- a/src/main/java/com/tobeto/spring_1b/entities/Car.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/entities/Car.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,5 +1,6 @@
+ package com.tobeto.spring_1b.entities;
+ 
++import com.fasterxml.jackson.annotation.JsonIgnore;
+ import jakarta.persistence.*;
+ import lombok.AllArgsConstructor;
+ import lombok.Getter;
+@@ -38,8 +39,10 @@
+ 
+     @ManyToOne
+     @JoinColumn(name="brand_id")
++    @JsonIgnore
+     private Brand brand;
+ 
+     @OneToMany(mappedBy = "car")
++    @JsonIgnore
+     private List<Rental> rental;
+ }
+Index: src/main/java/com/tobeto/spring_1b/entities/Customer.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/entities/Customer.java b/src/main/java/com/tobeto/spring_1b/entities/Customer.java
+--- a/src/main/java/com/tobeto/spring_1b/entities/Customer.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/entities/Customer.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,5 +1,6 @@
+ package com.tobeto.spring_1b.entities;
+ 
++import com.fasterxml.jackson.annotation.JsonIgnore;
+ import jakarta.persistence.*;
+ import lombok.AllArgsConstructor;
+ import lombok.Getter;
+@@ -40,5 +41,6 @@
+     private String phone;
+ 
+     @OneToMany(mappedBy = "customer")
++    @JsonIgnore
+     private List<Rental> rental;
+ }
+Index: src/main/java/com/tobeto/spring_1b/entities/Employee.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/entities/Employee.java b/src/main/java/com/tobeto/spring_1b/entities/Employee.java
+--- a/src/main/java/com/tobeto/spring_1b/entities/Employee.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/entities/Employee.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,5 +1,6 @@
+ package com.tobeto.spring_1b.entities;
+ 
++import com.fasterxml.jackson.annotation.JsonIgnore;
+ import jakarta.persistence.*;
+ import lombok.AllArgsConstructor;
+ import lombok.Getter;
+@@ -23,7 +24,7 @@
+     private int id;
+ 
+     @Column(name="first_name")
+-    private String firsName;
++    private String firstName;
+ 
+     @Column(name="last_name")
+     private String lastName;
+@@ -32,5 +33,6 @@
+     private Date birthDate;
+ 
+     @OneToMany(mappedBy = "employee")
++    @JsonIgnore
+     private List<Rental> rental;
+ }
+Index: src/main/java/com/tobeto/spring_1b/entities/Rental.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/entities/Rental.java b/src/main/java/com/tobeto/spring_1b/entities/Rental.java
+--- a/src/main/java/com/tobeto/spring_1b/entities/Rental.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/entities/Rental.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,5 +1,6 @@
+ package com.tobeto.spring_1b.entities;
+ 
++import com.fasterxml.jackson.annotation.JsonIgnore;
+ import jakarta.persistence.*;
+ import lombok.AllArgsConstructor;
+ import lombok.Getter;
+@@ -30,13 +31,16 @@
+ 
+     @ManyToOne
+     @JoinColumn(name="customer_id")
++    @JsonIgnore
+     private Customer customer;
+ 
+     @ManyToOne
+     @JoinColumn(name="car_id")
++    @JsonIgnore
+     private Car car;
+ 
+     @ManyToOne
+     @JoinColumn(name="employee_id")
++    @JsonIgnore
+     private Employee employee;
+ }
+Index: src/main/java/com/tobeto/spring_1b/services/abstracts/BrandService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/abstracts/BrandService.java b/src/main/java/com/tobeto/spring_1b/services/abstracts/BrandService.java
+--- a/src/main/java/com/tobeto/spring_1b/services/abstracts/BrandService.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/abstracts/BrandService.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,2 +1,21 @@
+-package com.tobeto.spring_1b.services.abstracts;public interface BrandService {
++package com.tobeto.spring_1b.services.abstracts;
++
++import com.tobeto.spring_1b.entities.Brand;
++import com.tobeto.spring_1b.services.dtos.requests.brand.AddBrandRequest;
++import com.tobeto.spring_1b.services.dtos.requests.brand.UpdateBrandRequest;
++import com.tobeto.spring_1b.services.dtos.responses.brand.GetBrandListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.brand.GetBrandResponse;
++
++import java.util.List;
++
++public interface BrandService {
++    List<GetBrandListResponse> getAll();
++    GetBrandResponse getById(int id);
++    void add(AddBrandRequest request);
++    void update(int id, UpdateBrandRequest updateBrandRequest);
++    void delete(int id);
++    List<GetBrandListResponse> getByName(String name);
++    List<GetBrandListResponse> getByCountry(String country);
++    List<Brand> search(String name);
++    List<Brand> search1(String country);
+ }
+Index: src/main/java/com/tobeto/spring_1b/services/abstracts/CarService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/abstracts/CarService.java b/src/main/java/com/tobeto/spring_1b/services/abstracts/CarService.java
+--- a/src/main/java/com/tobeto/spring_1b/services/abstracts/CarService.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/abstracts/CarService.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,2 +1,21 @@
+-package com.tobeto.spring_1b.services.abstracts;public interface CarService {
++package com.tobeto.spring_1b.services.abstracts;
++
++import com.tobeto.spring_1b.entities.Car;
++import com.tobeto.spring_1b.services.dtos.requests.car.AddCarRequest;
++import com.tobeto.spring_1b.services.dtos.requests.car.UpdateCarRequest;
++import com.tobeto.spring_1b.services.dtos.responses.car.GetCarListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.car.GetCarResponse;
++
++import java.util.List;
++
++public interface CarService {
++    List<GetCarListResponse> getAll();
++    GetCarResponse getById(int id);
++    void add(AddCarRequest request);
++    void update(int id, UpdateCarRequest updateCarRequest);
++    void delete(int id);
++    List<GetCarListResponse> getByName(String name);
++    List<GetCarListResponse> getByYear(int year);
++    List<Car> search(String name);
++    List<Car> searchYear(int year);
+ }
+Index: src/main/java/com/tobeto/spring_1b/services/abstracts/CustomerService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/abstracts/CustomerService.java b/src/main/java/com/tobeto/spring_1b/services/abstracts/CustomerService.java
+--- a/src/main/java/com/tobeto/spring_1b/services/abstracts/CustomerService.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/abstracts/CustomerService.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,2 +1,21 @@
+-package com.tobeto.spring_1b.services.abstracts;public interface CustomerService {
++package com.tobeto.spring_1b.services.abstracts;
++
++import com.tobeto.spring_1b.entities.Customer;
++import com.tobeto.spring_1b.services.dtos.requests.customer.AddCustomerRequest;
++import com.tobeto.spring_1b.services.dtos.requests.customer.UpdateCustomerRequest;
++import com.tobeto.spring_1b.services.dtos.responses.customer.GetCustomerListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.customer.GetCustomerResponse;
++
++import java.util.List;
++
++public interface CustomerService {
++    List<GetCustomerListResponse> getAll();
++    GetCustomerResponse getById(int id);
++    void add(AddCustomerRequest request);
++    void update(int id, UpdateCustomerRequest updateCustomerRequest);
++    void delete(int id);
++    List<GetCustomerListResponse> getByFullName(String name, String surname);
++    List<GetCustomerListResponse> getByAddress(String address);
++    List<Customer> search(String name, String surname);
++    List<Customer> searchAddress(String address);
+ }
+Index: src/main/java/com/tobeto/spring_1b/services/abstracts/EmployeeService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/abstracts/EmployeeService.java b/src/main/java/com/tobeto/spring_1b/services/abstracts/EmployeeService.java
+--- a/src/main/java/com/tobeto/spring_1b/services/abstracts/EmployeeService.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/abstracts/EmployeeService.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,2 +1,16 @@
+-package com.tobeto.spring_1b.services.abstracts;public interface EmployeeService {
++package com.tobeto.spring_1b.services.abstracts;
++
++import com.tobeto.spring_1b.services.dtos.requests.employee.AddEmployeeRequest;
++import com.tobeto.spring_1b.services.dtos.requests.employee.UpdateEmployeeRequest;
++import com.tobeto.spring_1b.services.dtos.responses.employee.GetEmployeeListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.employee.GetEmployeeResponse;
++
++import java.util.List;
++
++public interface EmployeeService {
++    List<GetEmployeeListResponse> getAll();
++    GetEmployeeResponse getById(int id);
++    void add(AddEmployeeRequest request);
++    void update(int id, UpdateEmployeeRequest updateEmployeeRequest);
++    void delete(int id);
+ }
+Index: src/main/java/com/tobeto/spring_1b/services/abstracts/RentalService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/abstracts/RentalService.java b/src/main/java/com/tobeto/spring_1b/services/abstracts/RentalService.java
+--- a/src/main/java/com/tobeto/spring_1b/services/abstracts/RentalService.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/abstracts/RentalService.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,2 +1,16 @@
+-package com.tobeto.spring_1b.services.abstracts;public interface RentalService {
++package com.tobeto.spring_1b.services.abstracts;
++
++import com.tobeto.spring_1b.services.dtos.requests.rental.AddRentalRequest;
++import com.tobeto.spring_1b.services.dtos.requests.rental.UpdateRentalRequest;
++import com.tobeto.spring_1b.services.dtos.responses.rental.GetRentalListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.rental.GetRentalResponse;
++
++import java.util.List;
++
++public interface RentalService {
++    List<GetRentalListResponse> getAll();
++    GetRentalResponse getById(int id);
++    void add(AddRentalRequest request);
++    void update(int id, UpdateRentalRequest updateRentalRequest);
++    void delete(int id);
+ }
+Index: src/main/java/com/tobeto/spring_1b/services/concretes/BrandManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/concretes/BrandManager.java b/src/main/java/com/tobeto/spring_1b/services/concretes/BrandManager.java
+--- a/src/main/java/com/tobeto/spring_1b/services/concretes/BrandManager.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/concretes/BrandManager.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,2 +1,101 @@
+-package com.tobeto.spring_1b.services.concretes;public class BrandManager {
++package com.tobeto.spring_1b.services.concretes;
++
++import com.tobeto.spring_1b.entities.Brand;
++import com.tobeto.spring_1b.repositories.BrandRepository;
++import com.tobeto.spring_1b.services.abstracts.BrandService;
++import com.tobeto.spring_1b.services.dtos.requests.brand.AddBrandRequest;
++import com.tobeto.spring_1b.services.dtos.requests.brand.UpdateBrandRequest;
++import com.tobeto.spring_1b.services.dtos.responses.brand.GetBrandListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.brand.GetBrandResponse;
++import lombok.AllArgsConstructor;
++import org.springframework.stereotype.Service;
++
++import java.util.ArrayList;
++import java.util.List;
++
++@AllArgsConstructor
++@Service
++public class BrandManager implements BrandService {
++    private final BrandRepository brandRepository;
++
++    @Override
++    public List<GetBrandListResponse> getAll() {
++        List<Brand> brands = brandRepository.findAll();
++        List<GetBrandListResponse> responseList = new ArrayList<>();
++
++        for (Brand brand : brands) {
++            GetBrandListResponse response = new GetBrandListResponse();
++            response.setId(brand.getId());
++            response.setName(brand.getName());
++            response.setCountry(brand.getCountry());
++            responseList.add(response);
++        }
++        return responseList;
++    }
++
++    @Override
++    public GetBrandResponse getById(int id) {
++        Brand brand = brandRepository.findById(id).orElseThrow();
++
++        GetBrandResponse response = new GetBrandResponse();
++        response.setName(brand.getName());
++        response.setCountry(brand.getCountry());
++        return response;
++    }
++
++    @Override
++    public void add(AddBrandRequest request) {
++        Brand brand = new Brand();
++        brand.setName(request.getName());
++        brand.setCountry(request.getCountry());
++        brandRepository.save(brand);
++    }
++
++    @Override
++    public void update(int id, UpdateBrandRequest updateBrandRequest) {
++        Brand brand = new Brand();
++        brandRepository.findById(brand.getId()).orElseThrow();
++        brand.setId(updateBrandRequest.getId());
++        brand.setName(updateBrandRequest.getName());
++        brand.setCountry(updateBrandRequest.getCountry());
++        brandRepository.save(brand);
++    }
++
++    @Override
++    public void delete(int id) {
++        Brand brandToDelete = brandRepository.findById(id).orElseThrow();
++        brandRepository.delete(brandToDelete);
++    }
++
++    @Override
++    public List<GetBrandListResponse> getByName(String name) {
++        List<Brand> brands = brandRepository.findByNameContaining("%" + name + "%");
++        List<GetBrandListResponse> response = new ArrayList<>();
++
++        for (Brand brand : brands) {
++            response.add(new GetBrandListResponse(brand.getName()));
++        }
++        return response;
++    }
++
++    @Override
++    public List<GetBrandListResponse> getByCountry(String country) {
++        List<Brand> brands = brandRepository.findByCountryStartingWith(country + "%");
++        List<GetBrandListResponse> response = new ArrayList<>();
++
++        for (Brand brand:brands) {
++            response.add(new GetBrandListResponse(brand.getCountry()));
++        }
++        return response;
++    }
++
++    @Override
++    public List<Brand> search(String name) {
++        return brandRepository.search(name);
++    }
++
++    @Override
++    public List<Brand> search1(String country){
++        return brandRepository.search1(country);
++    }
+ }
+Index: src/main/java/com/tobeto/spring_1b/services/concretes/CarManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/concretes/CarManager.java b/src/main/java/com/tobeto/spring_1b/services/concretes/CarManager.java
+--- a/src/main/java/com/tobeto/spring_1b/services/concretes/CarManager.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/concretes/CarManager.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,2 +1,114 @@
+-package com.tobeto.spring_1b.services.concretes;public class CarManager {
++package com.tobeto.spring_1b.services.concretes;
++
++import com.tobeto.spring_1b.entities.Car;
++import com.tobeto.spring_1b.repositories.CarRepository;
++import com.tobeto.spring_1b.services.abstracts.CarService;
++import com.tobeto.spring_1b.services.dtos.requests.car.AddCarRequest;
++import com.tobeto.spring_1b.services.dtos.requests.car.UpdateCarRequest;
++import com.tobeto.spring_1b.services.dtos.responses.car.GetCarListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.car.GetCarResponse;
++import lombok.AllArgsConstructor;
++import org.springframework.stereotype.Service;
++
++import java.util.ArrayList;
++import java.util.List;
++
++@AllArgsConstructor
++@Service
++public class CarManager implements CarService
++{
++    private final CarRepository carRepository;
++
++    @Override
++    public List<GetCarListResponse> getAll() {
++        List<Car> cars = carRepository.findAll();
++        List<GetCarListResponse> responseList = new ArrayList<>();
++
++        for (Car car : cars){
++            GetCarListResponse response = new GetCarListResponse();
++            response.setId(car.getId());
++            response.setYear(car.getYear());
++            response.setName(car.getName());
++            response.setModel(car.getModel());
++            response.setReadyToUse(car.isReadyToUse());
++            response.setRentalPrice(car.getRentalPrice());
++        }
++        return responseList;
++    }
++
++    @Override
++    public GetCarResponse getById(int id) {
++        Car car = carRepository.findById(id).orElseThrow();
++
++        GetCarResponse response = new GetCarResponse();
++        response.setYear(car.getYear());
++        response.setName(car.getName());
++        response.setModel(car.getModel());
++        response.setReadyToUse(car.isReadyToUse());
++        response.setRentalPrice(car.getRentalPrice());
++
++        return response;
++    }
++
++    @Override
++    public void add(AddCarRequest request) {
++        Car car = new Car();
++        car.setYear(request.getYear());
++        car.setName(request.getName());
++        car.setModel(request.getModel());
++        car.setReadyToUse(request.isReadyToUse());
++        car.setRentalPrice(request.getRentalPrice());
++        carRepository.save(car);
++    }
++
++    @Override
++    public void update(int id, UpdateCarRequest updateCarRequest) {
++        Car car = new Car();
++        carRepository.findById(id).orElseThrow();
++        car.setId(updateCarRequest.getId());
++        car.setName(updateCarRequest.getName());
++        car.setModel(updateCarRequest.getModel());
++        car.setYear(updateCarRequest.getYear());
++        car.setReadyToUse(updateCarRequest.isReadyToUse());
++        car.setRentalPrice(updateCarRequest.getRentalPrice());
++        carRepository.save(car);
++    }
++
++    @Override
++    public void delete(int id) {
++        Car carToDelete = carRepository.findById(id).orElseThrow();
++        carRepository.delete(carToDelete);
++    }
++
++    @Override
++    public List<GetCarListResponse> getByName(String name) {
++        List<Car> cars = carRepository.findByNameLike("%" + name + "%");
++        List<GetCarListResponse> response = new ArrayList<>();
++
++        for (Car car : cars) {
++            response.add(new GetCarListResponse(car.getName()));
++        }
++        return response;
++    }
++
++    @Override
++    public List<GetCarListResponse> getByYear(int year) {
++        List<Car> cars = carRepository.findByYearBetween(year);
++        List<GetCarListResponse> response = new ArrayList<>();
++
++        for (Car car : cars) {
++            response.add(new GetCarListResponse(car.getYear()));
++        }
++        return response;
++    }
++
++    @Override
++    public List<Car> search(String name) {
++        return carRepository.search(name);
++    }
++
++    @Override
++    public List<Car> searchYear(int year) {
++        return carRepository.searchYear(year);
++    }
+ }
+Index: src/main/java/com/tobeto/spring_1b/services/concretes/CustomerManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/concretes/CustomerManager.java b/src/main/java/com/tobeto/spring_1b/services/concretes/CustomerManager.java
+--- a/src/main/java/com/tobeto/spring_1b/services/concretes/CustomerManager.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/concretes/CustomerManager.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,2 +1,117 @@
+-package com.tobeto.spring_1b.services.concretes;public class CustomerManager {
++package com.tobeto.spring_1b.services.concretes;
++
++import com.tobeto.spring_1b.entities.Customer;
++import com.tobeto.spring_1b.repositories.CustomerRepository;
++import com.tobeto.spring_1b.services.abstracts.CustomerService;
++import com.tobeto.spring_1b.services.dtos.requests.customer.AddCustomerRequest;
++import com.tobeto.spring_1b.services.dtos.requests.customer.UpdateCustomerRequest;
++import com.tobeto.spring_1b.services.dtos.responses.customer.GetCustomerListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.customer.GetCustomerResponse;
++import lombok.AllArgsConstructor;
++import org.springframework.stereotype.Service;
++
++import java.util.ArrayList;
++import java.util.List;
++
++@AllArgsConstructor
++@Service
++public class CustomerManager implements CustomerService
++{
++    private final CustomerRepository customerRepository;
++
++    @Override
++    public List<GetCustomerListResponse> getAll() {
++        List<Customer> customers = customerRepository.findAll();
++        List<GetCustomerListResponse> responseList = new ArrayList<>();
++
++        for (Customer customer : customers) {
++            GetCustomerListResponse response = new GetCustomerListResponse();
++            response.setId(customer.getId());
++            response.setName(customer.getName());
++            response.setPhone(customer.getPhone());
++            response.setEmail(customer.getEmail());
++            response.setAddress(customer.getAddress());
++            response.setCarLicense(customer.getCarLicense());
++            response.setPhone(customer.getPhone());
++        }
++        return responseList;
++    }
++
++    @Override
++    public GetCustomerResponse getById(int id) {
++        Customer customer = customerRepository.findById(id).orElseThrow();
++
++        GetCustomerResponse response = new GetCustomerResponse();
++        response.setName(customer.getName());
++        response.setPhone(customer.getPhone());
++        response.setEmail(customer.getEmail());
++        response.setAddress(customer.getAddress());
++        response.setCarLicense(customer.getCarLicense());
++        response.setPhone(customer.getPhone());
++        return response;
++    }
++
++    @Override
++    public void add(AddCustomerRequest request) {
++        Customer customer = new Customer();
++        customer.setName(request.getName());
++        customer.setPhone(request.getPhone());
++        customer.setEmail(request.getEmail());
++        customer.setAddress(request.getAddress());
++        customer.setCarLicense(request.getCarLicense());
++        customer.setPhone(request.getPhone());
++        customerRepository.save(customer);
++    }
++
++    @Override
++    public void update(int id, UpdateCustomerRequest updateCustomerRequest) {
++        Customer customer = new Customer();
++        customerRepository.findById(id).orElseThrow();
++        customer.setId(updateCustomerRequest.getId());
++        customer.setName(updateCustomerRequest.getName());
++        customer.setSurname(updateCustomerRequest.getSurname());
++        customer.setAddress(updateCustomerRequest.getAddress());
++        customer.setPhone(updateCustomerRequest.getPhone());
++        customer.setEmail(updateCustomerRequest.getEmail());
++        customer.setCarLicense(updateCustomerRequest.getCarLicense());
++        customerRepository.save(customer);
++    }
++
++    @Override
++    public void delete(int id) {
++        Customer customerToDelete = customerRepository.findById(id).orElseThrow();
++        customerRepository.delete(customerToDelete);
++    }
++
++    @Override
++    public List<GetCustomerListResponse> getByFullName(String name, String surname) {
++        List<Customer> customers = customerRepository.findDistinctNameAndSurname(name,surname);
++        List<GetCustomerListResponse> response = new ArrayList<>();
++
++        for (Customer customer: customers) {
++            response.add(new GetCustomerListResponse(customer.getName(), customer.getSurname()));
++        }
++        return response;
++    }
++
++    @Override
++    public List<GetCustomerListResponse> getByAddress(String address) {
++        List<Customer> customers = customerRepository.findByAddressLike(address);
++        List<GetCustomerListResponse> response = new ArrayList<>();
++
++        for (Customer customer: customers) {
++            response.add(new GetCustomerListResponse(customer.getAddress()));
++        }
++        return response;
++    }
++
++    @Override
++    public List<Customer> search(String name, String surname) {
++        return customerRepository.search(name,surname);
++    }
++
++    @Override
++    public List<Customer> searchAddress(String address) {
++        return customerRepository.searchAddress(address);
++    }
+ }
+Index: src/main/java/com/tobeto/spring_1b/services/concretes/EmployeeManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/concretes/EmployeeManager.java b/src/main/java/com/tobeto/spring_1b/services/concretes/EmployeeManager.java
+--- a/src/main/java/com/tobeto/spring_1b/services/concretes/EmployeeManager.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/concretes/EmployeeManager.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,2 +1,73 @@
+-package com.tobeto.spring_1b.services.concretes;public class EmployeeManager {
++package com.tobeto.spring_1b.services.concretes;
++
++import com.tobeto.spring_1b.entities.Employee;
++import com.tobeto.spring_1b.repositories.EmployeeRepository;
++import com.tobeto.spring_1b.services.abstracts.EmployeeService;
++import com.tobeto.spring_1b.services.dtos.requests.employee.AddEmployeeRequest;
++import com.tobeto.spring_1b.services.dtos.requests.employee.UpdateEmployeeRequest;
++import com.tobeto.spring_1b.services.dtos.responses.employee.GetEmployeeListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.employee.GetEmployeeResponse;
++import lombok.AllArgsConstructor;
++import org.springframework.stereotype.Service;
++
++import java.util.ArrayList;
++import java.util.List;
++
++@AllArgsConstructor
++@Service
++public class EmployeeManager implements EmployeeService
++{
++    private final EmployeeRepository employeeRepository;
++
++    @Override
++    public List<GetEmployeeListResponse> getAll() {
++        List<Employee> employees = employeeRepository.findAll();
++        List<GetEmployeeListResponse> responseList = new ArrayList<>();
++
++        for (Employee employee : employees) {
++            GetEmployeeListResponse response = new GetEmployeeListResponse();
++            response.setId(employee.getId());
++            response.setFirstName(employee.getFirstName());
++            response.setLastName(employee.getLastName());
++            response.setBirthDate(employee.getBirthDate());
++        }
++        return responseList;
++    }
++
++    @Override
++    public GetEmployeeResponse getById(int id) {
++        Employee employee = employeeRepository.findById(id).orElseThrow();
++
++        GetEmployeeResponse response = new GetEmployeeResponse();
++        response.setFirstName(employee.getFirstName());
++        response.setLastName(employee.getLastName());
++        response.setBirthDate(employee.getBirthDate());
++        return response;
++    }
++
++    @Override
++    public void add(AddEmployeeRequest request) {
++        Employee employee = new Employee();
++        employee.setFirstName(request.getFirstName());
++        employee.setLastName(request.getLastName());
++        employee.setBirthDate(request.getBirthDate());
++        employeeRepository.save(employee);
++    }
++
++    @Override
++    public void update(int id, UpdateEmployeeRequest updateEmployeeRequest) {
++        Employee employee = new Employee();
++        employeeRepository.findById(id).orElseThrow();
++        employee.setId(updateEmployeeRequest.getId());
++        employee.setFirstName(updateEmployeeRequest.getFirstName());
++        employee.setLastName(updateEmployeeRequest.getLastName());
++        employee.setBirthDate(updateEmployeeRequest.getBirthDate());
++        employeeRepository.save(employee);
++    }
++
++    @Override
++    public void delete(int id) {
++        Employee employeeToDelete = employeeRepository.findById(id).orElseThrow();
++        employeeRepository.delete(employeeToDelete);
++    }
+ }
+Index: src/main/java/com/tobeto/spring_1b/services/concretes/RentalManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/concretes/RentalManager.java b/src/main/java/com/tobeto/spring_1b/services/concretes/RentalManager.java
+--- a/src/main/java/com/tobeto/spring_1b/services/concretes/RentalManager.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/concretes/RentalManager.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,2 +1,73 @@
+-package com.tobeto.spring_1b.services.concretes;public class RentalManager {
++package com.tobeto.spring_1b.services.concretes;
++
++import com.tobeto.spring_1b.entities.Rental;
++import com.tobeto.spring_1b.repositories.RentalRepository;
++import com.tobeto.spring_1b.services.abstracts.RentalService;
++import com.tobeto.spring_1b.services.dtos.requests.rental.AddRentalRequest;
++import com.tobeto.spring_1b.services.dtos.requests.rental.UpdateRentalRequest;
++import com.tobeto.spring_1b.services.dtos.responses.rental.GetRentalListResponse;
++import com.tobeto.spring_1b.services.dtos.responses.rental.GetRentalResponse;
++import lombok.AllArgsConstructor;
++import org.springframework.stereotype.Service;
++
++import java.util.ArrayList;
++import java.util.List;
++
++@AllArgsConstructor
++@Service
++public class RentalManager implements RentalService
++{
++    private final RentalRepository rentalRepository;
++
++    @Override
++    public List<GetRentalListResponse> getAll() {
++        List<Rental> rentals = rentalRepository.findAll();
++        List<GetRentalListResponse> responseList = new ArrayList<>();
++
++        for (Rental rental : rentals) {
++            GetRentalListResponse response = new GetRentalListResponse();
++            response.setId(rental.getId());
++            response.setStartDate(rental.getStartDate());
++            response.setEndDate(rental.getEndDate());
++            response.setTotalPrice(rental.getTotalPrice());
++        }
++        return responseList;
++    }
++
++    @Override
++    public GetRentalResponse getById(int id) {
++        Rental rental = rentalRepository.findById(id).orElseThrow();
++
++        GetRentalResponse response = new GetRentalResponse();
++        response.setStartDate(rental.getStartDate());
++        response.setEndDate(rental.getEndDate());
++        response.setTotalPrice(rental.getTotalPrice());
++        return response;
++    }
++
++    @Override
++    public void add(AddRentalRequest request) {
++        Rental rental = new Rental();
++        rental.setStartDate(request.getStartDate());
++        rental.setEndDate(request.getEndDate());
++        rental.setTotalPrice(request.getTotalPrice());
++        rentalRepository.save(rental);
++    }
++
++    @Override
++    public void update(int id, UpdateRentalRequest updateRentalRequest) {
++        Rental rental = new Rental();
++        rentalRepository.findById(id).orElseThrow();
++        rental.setId(updateRentalRequest.getId());
++        rental.setStartDate(updateRentalRequest.getStartDate());
++        rental.setEndDate(updateRentalRequest.getEndDate());
++        rental.setTotalPrice(updateRentalRequest.getTotalPrice());
++        rentalRepository.save(rental);
++    }
++
++    @Override
++    public void delete(int id) {
++        Rental rentalToDelete = rentalRepository.findById(id).orElseThrow();
++        rentalRepository.delete(rentalToDelete);
++    }
+ }
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/requests/brand/AddBrandRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/brand/AddBrandRequest.java b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/brand/AddBrandRequest.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/brand/AddBrandRequest.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/brand/AddBrandRequest.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.requests.brand;
++package com.tobeto.spring_1b.services.dtos.requests.brand;
+ 
+ import lombok.AllArgsConstructor;
+ import lombok.Data;
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/requests/brand/UpdateBrandRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/brand/UpdateBrandRequest.java b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/brand/UpdateBrandRequest.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/brand/UpdateBrandRequest.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/brand/UpdateBrandRequest.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.requests.brand;
++package com.tobeto.spring_1b.services.dtos.requests.brand;
+ 
+ import lombok.Data;
+ 
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/requests/car/AddCarRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/car/AddCarRequest.java b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/car/AddCarRequest.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/car/AddCarRequest.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/car/AddCarRequest.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.requests.car;
++package com.tobeto.spring_1b.services.dtos.requests.car;
+ 
+ import lombok.AllArgsConstructor;
+ import lombok.Data;
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/requests/car/UpdateCarRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/car/UpdateCarRequest.java b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/car/UpdateCarRequest.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/car/UpdateCarRequest.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/car/UpdateCarRequest.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.requests.car;
++package com.tobeto.spring_1b.services.dtos.requests.car;
+ 
+ import lombok.Data;
+ 
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/requests/customer/AddCustomerRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/customer/AddCustomerRequest.java b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/customer/AddCustomerRequest.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/customer/AddCustomerRequest.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/customer/AddCustomerRequest.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.requests.customer;
++package com.tobeto.spring_1b.services.dtos.requests.customer;
+ 
+ import lombok.AllArgsConstructor;
+ import lombok.Data;
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/requests/customer/UpdateCustomerRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/customer/UpdateCustomerRequest.java b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/customer/UpdateCustomerRequest.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/customer/UpdateCustomerRequest.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/customer/UpdateCustomerRequest.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.requests.customer;
++package com.tobeto.spring_1b.services.dtos.requests.customer;
+ 
+ import lombok.Data;
+ 
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/requests/employee/AddEmployeeRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/employee/AddEmployeeRequest.java b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/employee/AddEmployeeRequest.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/employee/AddEmployeeRequest.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/employee/AddEmployeeRequest.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.requests.employee;
++package com.tobeto.spring_1b.services.dtos.requests.employee;
+ 
+ import lombok.AllArgsConstructor;
+ import lombok.Data;
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/requests/employee/UpdateEmployeeRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/employee/UpdateEmployeeRequest.java b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/employee/UpdateEmployeeRequest.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/employee/UpdateEmployeeRequest.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/employee/UpdateEmployeeRequest.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.requests.employee;
++package com.tobeto.spring_1b.services.dtos.requests.employee;
+ 
+ import lombok.Data;
+ 
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/requests/rental/AddRentalRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/rental/AddRentalRequest.java b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/rental/AddRentalRequest.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/rental/AddRentalRequest.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/rental/AddRentalRequest.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.requests.rental;
++package com.tobeto.spring_1b.services.dtos.requests.rental;
+ 
+ import lombok.AllArgsConstructor;
+ import lombok.Data;
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/requests/rental/UpdateRentalRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/rental/UpdateRentalRequest.java b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/rental/UpdateRentalRequest.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/requests/rental/UpdateRentalRequest.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/requests/rental/UpdateRentalRequest.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.requests.rental;
++package com.tobeto.spring_1b.services.dtos.requests.rental;
+ 
+ import lombok.Data;
+ 
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/responses/brand/GetBrandListResponse.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/brand/GetBrandListResponse.java b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/brand/GetBrandListResponse.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/brand/GetBrandListResponse.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/brand/GetBrandListResponse.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,10 +1,19 @@
+-package com.tobeto.spring_1b.dtos.responses.brand;
++package com.tobeto.spring_1b.services.dtos.responses.brand;
+ 
++import lombok.AllArgsConstructor;
+ import lombok.Data;
++import lombok.NoArgsConstructor;
+ 
+ @Data
++@AllArgsConstructor
++@NoArgsConstructor
+ public class GetBrandListResponse {
+     private int id;
+     private String name;
+     private String country;
++
++    public GetBrandListResponse(String name) {
++        this.name = name;
++    }
+ }
++
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/responses/brand/GetBrandResponse.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/brand/GetBrandResponse.java b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/brand/GetBrandResponse.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/brand/GetBrandResponse.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/brand/GetBrandResponse.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.responses.brand;
++package com.tobeto.spring_1b.services.dtos.responses.brand;
+ 
+ import lombok.AllArgsConstructor;
+ import lombok.Data;
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/responses/car/GetCarListResponse.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/car/GetCarListResponse.java b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/car/GetCarListResponse.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/car/GetCarListResponse.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/car/GetCarListResponse.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,8 +1,12 @@
+-package com.tobeto.spring_1b.dtos.responses.car;
++package com.tobeto.spring_1b.services.dtos.responses.car;
+ 
++import lombok.AllArgsConstructor;
+ import lombok.Data;
++import lombok.NoArgsConstructor;
+ 
+ @Data
++@AllArgsConstructor
++@NoArgsConstructor
+ public class GetCarListResponse {
+     private int id;
+     private String name;
+@@ -10,4 +14,11 @@
+     private int year;
+     private boolean readyToUse;
+     private int rentalPrice;
++
++    public GetCarListResponse(String name) {
++        this.name = name;
++    }
++    public GetCarListResponse(int year) {
++        this.year = year;
++    }
+ }
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/responses/car/GetCarResponse.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/car/GetCarResponse.java b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/car/GetCarResponse.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/car/GetCarResponse.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/car/GetCarResponse.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.responses.car;
++package com.tobeto.spring_1b.services.dtos.responses.car;
+ 
+ import lombok.AllArgsConstructor;
+ import lombok.Data;
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/responses/customer/GetCustomerListResponse.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/customer/GetCustomerListResponse.java b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/customer/GetCustomerListResponse.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/customer/GetCustomerListResponse.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/customer/GetCustomerListResponse.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,8 +1,12 @@
+-package com.tobeto.spring_1b.dtos.responses.customer;
++package com.tobeto.spring_1b.services.dtos.responses.customer;
+ 
++import lombok.AllArgsConstructor;
+ import lombok.Data;
++import lombok.NoArgsConstructor;
+ 
+ @Data
++@AllArgsConstructor
++@NoArgsConstructor
+ public class GetCustomerListResponse {
+     private int id;
+     private String name;
+@@ -11,4 +15,13 @@
+     private String address;
+     private String email;
+     private String phone;
++
++    public GetCustomerListResponse(String name, String surname) {
++        this.name = name;
++        this.surname = surname;
++    }
++
++    public GetCustomerListResponse(String address) {
++        this.address = address;
++    }
+ }
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/responses/customer/GetCustomerResponse.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/customer/GetCustomerResponse.java b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/customer/GetCustomerResponse.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/customer/GetCustomerResponse.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/customer/GetCustomerResponse.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.responses.customer;
++package com.tobeto.spring_1b.services.dtos.responses.customer;
+ 
+ import lombok.AllArgsConstructor;
+ import lombok.Data;
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/responses/employee/GetEmployeeListResponse.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/employee/GetEmployeeListResponse.java b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/employee/GetEmployeeListResponse.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/employee/GetEmployeeListResponse.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/employee/GetEmployeeListResponse.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.responses.employee;
++package com.tobeto.spring_1b.services.dtos.responses.employee;
+ 
+ import lombok.Data;
+ 
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/responses/employee/GetEmployeeResponse.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/employee/GetEmployeeResponse.java b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/employee/GetEmployeeResponse.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/employee/GetEmployeeResponse.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/employee/GetEmployeeResponse.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.responses.employee;
++package com.tobeto.spring_1b.services.dtos.responses.employee;
+ 
+ import lombok.AllArgsConstructor;
+ import lombok.Data;
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/responses/rental/GetRentalListResponse.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/rental/GetRentalListResponse.java b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/rental/GetRentalListResponse.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/rental/GetRentalListResponse.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/rental/GetRentalListResponse.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.responses.rental;
++package com.tobeto.spring_1b.services.dtos.responses.rental;
+ 
+ import lombok.Data;
+ 
+Index: src/main/java/com/tobeto/spring_1b/services/dtos/responses/rental/GetRentalResponse.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/rental/GetRentalResponse.java b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/rental/GetRentalResponse.java
+--- a/src/main/java/com/tobeto/spring_1b/services/dtos/responses/rental/GetRentalResponse.java	(revision 0302d95a55e2c36a89b3d52a4a03bb350364a316)
++++ b/src/main/java/com/tobeto/spring_1b/services/dtos/responses/rental/GetRentalResponse.java	(revision a9bd8e9f1962a68d5b806339048361aef2d571b9)
+@@ -1,4 +1,4 @@
+-package com.tobeto.spring_1b.dtos.responses.rental;
++package com.tobeto.spring_1b.services.dtos.responses.rental;
+ 
+ import lombok.AllArgsConstructor;
+ import lombok.Data;
