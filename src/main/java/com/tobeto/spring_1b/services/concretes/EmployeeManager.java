@@ -70,4 +70,36 @@ public class EmployeeManager implements EmployeeService
         Employee employeeToDelete = employeeRepository.findById(id).orElseThrow();
         employeeRepository.delete(employeeToDelete);
     }
+
+    @Override
+    public List<GetEmployeeListResponse> getByFullName(String lastName, String firstName) {
+        List<Employee> employees = employeeRepository.findByLastnameOrFirstname(lastName,firstName);
+        List<GetEmployeeListResponse> response = new ArrayList<>();
+
+        for (Employee employee:employees) {
+            response.add(new GetEmployeeListResponse(employee.getLastName(),employee.getFirstName()));
+        }
+        return response;
+    }
+
+    @Override
+    public List<GetEmployeeListResponse> geyByDate(String birthDate) {
+        List<Employee> employees = employeeRepository.findByStartDateBetween(birthDate);
+        List<GetEmployeeListResponse> response = new ArrayList<>();
+
+        for (Employee employee:employees) {
+            response.add(new GetEmployeeListResponse(employee.getBirthDate()));
+        }
+        return response;
+    }
+
+    @Override
+    public List<Employee> search(String lastName, String firstName) {
+        return employeeRepository.search(lastName,firstName);
+    }
+
+    @Override
+    public List<Employee> searchDate(String birthDate) {
+        return employeeRepository.searchDate(birthDate);
+    }
 }

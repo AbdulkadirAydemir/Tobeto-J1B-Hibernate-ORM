@@ -1,5 +1,6 @@
 package com.tobeto.spring_1b.services.abstracts;
 
+import com.tobeto.spring_1b.entities.Employee;
 import com.tobeto.spring_1b.services.dtos.requests.employee.AddEmployeeRequest;
 import com.tobeto.spring_1b.services.dtos.requests.employee.UpdateEmployeeRequest;
 import com.tobeto.spring_1b.services.dtos.responses.employee.GetEmployeeListResponse;
@@ -13,4 +14,8 @@ public interface EmployeeService {
     void add(AddEmployeeRequest request);
     void update(int id, UpdateEmployeeRequest updateEmployeeRequest);
     void delete(int id);
+    List<GetEmployeeListResponse> getByFullName(String lastName, String firstName);
+    List<GetEmployeeListResponse> geyByDate(String birthDate);
+    List<Employee> search(String lastName, String firstName);
+    List<Employee> searchDate(String birthDate);
 }

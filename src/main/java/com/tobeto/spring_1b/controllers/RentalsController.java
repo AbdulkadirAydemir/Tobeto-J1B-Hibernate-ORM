@@ -1,5 +1,6 @@
 package com.tobeto.spring_1b.controllers;
 
+import com.tobeto.spring_1b.entities.Rental;
 import com.tobeto.spring_1b.services.abstracts.RentalService;
 import com.tobeto.spring_1b.services.dtos.requests.rental.AddRentalRequest;
 import com.tobeto.spring_1b.services.dtos.requests.rental.UpdateRentalRequest;
@@ -25,6 +26,26 @@ public class RentalsController {
     @GetMapping("{id}")
     public GetRentalResponse getById(@PathVariable int id){
         return rentalService.getById(id);
+    }
+
+    @GetMapping("date")
+    public List<GetRentalListResponse> getByStartDateAfter(@RequestParam String startDate){
+        return this.rentalService.getByStartDateAfter(startDate);
+    }
+
+    @GetMapping("price")
+    public List<GetRentalListResponse> getByTotalPriceDesc(@RequestParam int totalPrice){
+        return this.rentalService.getByTotalPriceDesc(totalPrice);
+    }
+
+    @GetMapping("search")
+    public List<Rental> search(@RequestParam String startDate){
+        return this.rentalService.search(startDate);
+    }
+
+    @GetMapping("search/price")
+    public List<Rental> searchPrice(@RequestParam int totalPrice){
+        return this.rentalService.searchPrice(totalPrice);
     }
 
     @PostMapping

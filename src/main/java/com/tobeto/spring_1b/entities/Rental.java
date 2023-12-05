@@ -27,7 +27,7 @@ public class Rental {
     private String endDate;
 
     @Column(name="total_price")
-    private String totalPrice;
+    private int totalPrice;
 
     @ManyToOne
     @JoinColumn(name="customer_id")

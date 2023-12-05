@@ -41,7 +41,7 @@ public class RentalManager implements RentalService
         GetRentalResponse response = new GetRentalResponse();
         response.setStartDate(rental.getStartDate());
         response.setEndDate(rental.getEndDate());
-        response.setTotalPrice(rental.getTotalPrice());
+        response.setTotalPrice(String.valueOf(rental.getTotalPrice()));
         return response;
     }
 
@@ -50,7 +50,7 @@ public class RentalManager implements RentalService
         Rental rental = new Rental();
         rental.setStartDate(request.getStartDate());
         rental.setEndDate(request.getEndDate());
-        rental.setTotalPrice(request.getTotalPrice());
+        rental.setTotalPrice(Integer.parseInt(request.getTotalPrice()));
         rentalRepository.save(rental);
     }
 
@@ -61,7 +61,7 @@ public class RentalManager implements RentalService
         rental.setId(updateRentalRequest.getId());
         rental.setStartDate(updateRentalRequest.getStartDate());
         rental.setEndDate(updateRentalRequest.getEndDate());
-        rental.setTotalPrice(updateRentalRequest.getTotalPrice());
+        rental.setTotalPrice(Integer.parseInt(updateRentalRequest.getTotalPrice()));
         rentalRepository.save(rental);
     }
 
@@ -69,5 +69,37 @@ public class RentalManager implements RentalService
     public void delete(int id) {
         Rental rentalToDelete = rentalRepository.findById(id).orElseThrow();
         rentalRepository.delete(rentalToDelete);
+    }
+
+    @Override
+    public List<GetRentalListResponse> getByStartDateAfter(String startDate) {
+        List<Rental> rentals = rentalRepository.findByStartDateAfter(startDate);
+        List<GetRentalListResponse> response = new ArrayList<>();
+
+        for (Rental rental:rentals) {
+            response.add(new GetRentalListResponse(rental.getStartDate()));
+        }
+        return response;
+    }
+
+    @Override
+    public List<GetRentalListResponse> getByTotalPriceDesc(int totalPrice) {
+        List<Rental> rentals = rentalRepository.findByOrderByTotalPriceDesc(totalPrice);
+        List<GetRentalListResponse> response = new ArrayList<>();
+
+        for (Rental rental:rentals) {
+            response.add(new GetRentalListResponse(rental.getTotalPrice()));
+        }
+        return response;
+    }
+
+    @Override
+    public List<Rental> search(String startDate) {
+        return rentalRepository.search(startDate);
+    }
+
+    @Override
+    public List<Rental> searchPrice(int totalPrice) {
+        return rentalRepository.searchPrice(totalPrice);
     }
 }
