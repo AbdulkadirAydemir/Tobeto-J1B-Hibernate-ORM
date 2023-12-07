@@ -11,12 +11,12 @@ public interface CarRepository extends JpaRepository<Car, Integer>{
     // Derived Query Methods
 
     List<Car> findByNameLike(String name);
-    List<Car> findByYearBetween(int year);
+    List<Car> findByYearLike(int year);
 
     // JPQL
 
     @Query("SELECT c FROM Car c Where c.name LIKE %:name%")
     List<Car> search(String name);
-    @Query("SELECT c FROM Car c Where EXTRACT(YEAR FROM \":year\") = 2023;")
+    @Query("SELECT c FROM Car c Where c.year LIKE :year")
     List<Car> searchYear(int year);
 }

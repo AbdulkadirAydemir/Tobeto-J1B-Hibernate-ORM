@@ -29,25 +29,24 @@ public class EmployeesController {
     }
 
     @GetMapping("name")
-    public List<GetEmployeeListResponse> getByFullName(@RequestParam String lastName, @RequestParam String firstName) {
-        return this.employeeService.getByFullName(lastName,firstName);
+    public List<GetEmployeeListResponse> getByFirstName(@RequestParam String firstName) {
+        return this.employeeService.getByFirstName(firstName);
     }
 
     @GetMapping("birth")
-    public List<GetEmployeeListResponse> geyByDate(@RequestParam String birthDate){
-        return this.employeeService.geyByDate(birthDate);
+    public List<GetEmployeeListResponse> getByLastName(@RequestParam String lastName){
+        return this.employeeService.getByLastName(lastName);
     }
 
     @GetMapping("search")
-    public List<Employee> search(@RequestParam String lastName, @RequestParam String firstName){
-        return this.employeeService.search(lastName,firstName);
+    public List<Employee> search(@RequestParam String firstName){
+        return this.employeeService.search(firstName);
     }
 
     @GetMapping("search/birth")
-    public List<Employee> searchDate(@RequestParam String birthDate){
-        return this.employeeService.searchDate(birthDate);
+    public List<Employee> searchDate(@RequestParam String lastName){
+        return this.employeeService.search2(lastName);
     }
-
 
     @PostMapping
     public void add(@RequestBody AddEmployeeRequest request){

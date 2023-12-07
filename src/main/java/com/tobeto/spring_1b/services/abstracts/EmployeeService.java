@@ -14,8 +14,8 @@ public interface EmployeeService {
     void add(AddEmployeeRequest request);
     void update(int id, UpdateEmployeeRequest updateEmployeeRequest);
     void delete(int id);
-    List<GetEmployeeListResponse> getByFullName(String lastName, String firstName);
-    List<GetEmployeeListResponse> geyByDate(String birthDate);
-    List<Employee> search(String lastName, String firstName);
-    List<Employee> searchDate(String birthDate);
+    List<GetEmployeeListResponse> getByFirstName(String firstName);
+    List<GetEmployeeListResponse> getByLastName(String lastName);
+    List<Employee> search(String firstName);
+    List<Employee> search2(String lastName);
 }

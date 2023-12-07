@@ -29,13 +29,13 @@ public class RentalsController {
     }
 
     @GetMapping("date")
-    public List<GetRentalListResponse> getByStartDateAfter(@RequestParam String startDate){
-        return this.rentalService.getByStartDateAfter(startDate);
+    public List<GetRentalListResponse> getByStartDate(@RequestParam String startDate){
+        return this.rentalService.getByStartDate(startDate);
     }
 
     @GetMapping("price")
-    public List<GetRentalListResponse> getByTotalPriceDesc(@RequestParam int totalPrice){
-        return this.rentalService.getByTotalPriceDesc(totalPrice);
+    public List<GetRentalListResponse> getByEndDate(@RequestParam String endDate){
+        return this.rentalService.getByEndDate(endDate);
     }
 
     @GetMapping("search")
@@ -43,9 +43,9 @@ public class RentalsController {
         return this.rentalService.search(startDate);
     }
 
-    @GetMapping("search/price")
-    public List<Rental> searchPrice(@RequestParam int totalPrice){
-        return this.rentalService.searchPrice(totalPrice);
+    @GetMapping("search2")
+    public List<Rental> search2(@RequestParam String endDate){
+        return this.rentalService.search2(endDate);
     }
 
     @PostMapping

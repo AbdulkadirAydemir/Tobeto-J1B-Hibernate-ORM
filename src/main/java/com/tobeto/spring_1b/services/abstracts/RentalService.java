@@ -14,8 +14,8 @@ public interface RentalService {
     void add(AddRentalRequest request);
     void update(int id, UpdateRentalRequest updateRentalRequest);
     void delete(int id);
-    List<GetRentalListResponse> getByStartDateAfter(String startDate);
-    List<GetRentalListResponse> getByTotalPriceDesc(int totalPrice);
+    List<GetRentalListResponse> getByStartDate(String startDate);
+    List<GetRentalListResponse> getByEndDate(String endDate);
     List<Rental> search(String startDate);
-    List<Rental> searchPrice(int totalPrice);
+    List<Rental> search2(String endDate);
 }

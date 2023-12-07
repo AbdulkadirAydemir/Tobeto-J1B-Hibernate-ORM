@@ -72,8 +72,8 @@ public class RentalManager implements RentalService
     }
 
     @Override
-    public List<GetRentalListResponse> getByStartDateAfter(String startDate) {
-        List<Rental> rentals = rentalRepository.findByStartDateAfter(startDate);
+    public List<GetRentalListResponse> getByStartDate(String startDate) {
+        List<Rental> rentals = rentalRepository.findByStartDateLike(startDate);
         List<GetRentalListResponse> response = new ArrayList<>();
 
         for (Rental rental:rentals) {
@@ -83,8 +83,8 @@ public class RentalManager implements RentalService
     }
 
     @Override
-    public List<GetRentalListResponse> getByTotalPriceDesc(int totalPrice) {
-        List<Rental> rentals = rentalRepository.findByOrderByTotalPriceDesc(totalPrice);
+    public List<GetRentalListResponse> getByEndDate(String endDate) {
+        List<Rental> rentals = rentalRepository.findByEndDateLike(endDate);
         List<GetRentalListResponse> response = new ArrayList<>();
 
         for (Rental rental:rentals) {
@@ -99,7 +99,7 @@ public class RentalManager implements RentalService
     }
 
     @Override
-    public List<Rental> searchPrice(int totalPrice) {
-        return rentalRepository.searchPrice(totalPrice);
+    public List<Rental> search2(String endDate) {
+        return rentalRepository.search2(endDate);
     }
 }

@@ -10,13 +10,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer>{
 
     // Derived Query Methods
 
-    List<Employee> findByLastnameOrFirstname(String lastName,String firstName);
-    List<Employee> findByStartDateBetween(String birthDate);
+    List<Employee> findByFirstNameLike(String firstName);
+    List<Employee> findByLastNameLike(String lastName);
 
     // JPQL
 
-    @Query("SELECT CONCAT(:lastName, ' ', :firstName) FROM Employee e")
-    List<Employee> search(String lastName,String firstName);
-    @Query("SELECT YEAR(CURRENT_DATE) - YEAR(:birthDate) FROM Employee e")
-    List<Employee> searchDate(String birthDate);
+    @Query("SELECT e.firstName FROM Employee e Where e.firstName LIKE %:firstName%")
+    List<Employee> search(String firstName);
+    @Query("SELECT e.lastName FROM Employee e Where e.lastName LIKE %:lastName%")
+    List<Employee> search2(String lastName);
 }

@@ -72,34 +72,34 @@ public class EmployeeManager implements EmployeeService
     }
 
     @Override
-    public List<GetEmployeeListResponse> getByFullName(String lastName, String firstName) {
-        List<Employee> employees = employeeRepository.findByLastnameOrFirstname(lastName,firstName);
+    public List<GetEmployeeListResponse> getByFirstName(String firstName) {
+        List<Employee> employees = employeeRepository.findByFirstNameLike(firstName);
         List<GetEmployeeListResponse> response = new ArrayList<>();
 
         for (Employee employee:employees) {
-            response.add(new GetEmployeeListResponse(employee.getLastName(),employee.getFirstName()));
+            response.add(new GetEmployeeListResponse(employee.getFirstName()));
         }
         return response;
     }
 
     @Override
-    public List<GetEmployeeListResponse> geyByDate(String birthDate) {
-        List<Employee> employees = employeeRepository.findByStartDateBetween(birthDate);
+    public List<GetEmployeeListResponse> getByLastName(String lastName) {
+        List<Employee> employees = employeeRepository.findByLastNameLike(lastName);
         List<GetEmployeeListResponse> response = new ArrayList<>();
 
         for (Employee employee:employees) {
-            response.add(new GetEmployeeListResponse(employee.getBirthDate()));
+            response.add(new GetEmployeeListResponse(employee.getLastName()));
         }
         return response;
     }
 
     @Override
-    public List<Employee> search(String lastName, String firstName) {
-        return employeeRepository.search(lastName,firstName);
+    public List<Employee> search(String firstName) {
+        return employeeRepository.search(firstName);
     }
 
     @Override
-    public List<Employee> searchDate(String birthDate) {
-        return employeeRepository.searchDate(birthDate);
+    public List<Employee> search2(String lastName) {
+        return employeeRepository.search2(lastName);
     }
 }

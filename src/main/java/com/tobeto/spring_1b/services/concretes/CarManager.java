@@ -93,7 +93,7 @@ public class CarManager implements CarService
 
     @Override
     public List<GetCarListResponse> getByYear(int year) {
-        List<Car> cars = carRepository.findByYearBetween(year);
+        List<Car> cars = carRepository.findByYearLike(year);
         List<GetCarListResponse> response = new ArrayList<>();
 
         for (Car car : cars) {

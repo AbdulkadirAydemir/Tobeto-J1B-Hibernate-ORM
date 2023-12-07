@@ -84,12 +84,12 @@ public class CustomerManager implements CustomerService
     }
 
     @Override
-    public List<GetCustomerListResponse> getByFullName(String name, String surname) {
-        List<Customer> customers = customerRepository.findDistinctNameAndSurname(name,surname);
+    public List<GetCustomerListResponse> getByFullName(String name) {
+        List<Customer> customers = customerRepository.findByNameLike(name);
         List<GetCustomerListResponse> response = new ArrayList<>();
 
         for (Customer customer: customers) {
-            response.add(new GetCustomerListResponse(customer.getName(), customer.getSurname()));
+            response.add(new GetCustomerListResponse(customer.getName()));
         }
         return response;
     }
@@ -106,8 +106,8 @@ public class CustomerManager implements CustomerService
     }
 
     @Override
-    public List<Customer> search(String name, String surname) {
-        return customerRepository.search(name,surname);
+    public List<Customer> search(String name) {
+        return customerRepository.search(name);
     }
 
     @Override

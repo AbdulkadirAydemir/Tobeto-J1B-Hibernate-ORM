@@ -29,8 +29,8 @@ public class CustomersController {
     }
 
     @GetMapping("name")
-    public List<GetCustomerListResponse> getByFullName(@RequestParam String name, @RequestParam String surname){
-        return this.customerService.getByFullName(name,surname);
+    public List<GetCustomerListResponse> getByFullName(@RequestParam String name){
+        return this.customerService.getByFullName(name);
     }
 
     @GetMapping("address")
@@ -39,8 +39,8 @@ public class CustomersController {
     }
 
     @GetMapping("search")
-    public List<Customer> search(@RequestParam String name, @RequestParam String surname){
-        return this.customerService.search(name,surname);
+    public List<Customer> search(@RequestParam String name){
+        return this.customerService.search(name);
     }
 
     @GetMapping("search/address")

@@ -10,13 +10,13 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
 
     // Derived Query Methods
 
-    List<Rental> findByStartDateAfter(String startDate);
-    List<Rental> findByOrderByTotalPriceDesc(int totalPrice);
+    List<Rental> findByStartDateLike(String startDate);
+    List<Rental> findByEndDateLike(String endDate);
 
     // JPQL
 
-    @Query("SELECT r FROM Rental r WHERE :startDate > CURRENT_DATE")
+    @Query("SELECT r.startDate FROM Rental r Where r.startDate LIKE %:startDate%")
     List<Rental> search(String startDate);
-    @Query("SELECT r FROM Rental r ORDER BY :rentalPrice DESC")
-    List<Rental> searchPrice(int totalPrice);
+    @Query("SELECT r.endDate FROM Rental r Where r.endDate LIKE %:endDate%")
+    List<Rental> search2(String endDate);
 }

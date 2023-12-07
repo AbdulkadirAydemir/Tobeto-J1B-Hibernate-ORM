@@ -15,9 +15,7 @@ public class GetEmployeeListResponse {
     private String lastName;
     private Date birthDate;
 
-    public GetEmployeeListResponse(String lastName, String firstName) {
-    }
+    public GetEmployeeListResponse(String firstName) {
 
-    public GetEmployeeListResponse(Date birthDate) {
     }
 }
