@@ -24,15 +24,8 @@ public class RentalManager implements RentalService
     @Override
     public List<GetRentalListResponse> getAll() {
         List<Rental> rentals = rentalRepository.findAll();
-        List<GetRentalListResponse> responseList = new ArrayList<>();
-
-        for (Rental rental : rentals) {
-            GetRentalListResponse response = new GetRentalListResponse();
-            response.setId(rental.getId());
-            response.setStartDate(rental.getStartDate());
-            response.setEndDate(rental.getEndDate());
-            response.setTotalPrice(rental.getTotalPrice());
-        }
+        List<GetRentalListResponse> responseList = rentals.stream().map(rental -> this.modelMapperService.forResponse()
+                .map(rental,GetRentalListResponse.class)).toList();
         return responseList;
     }
 

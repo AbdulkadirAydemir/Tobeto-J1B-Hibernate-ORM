@@ -24,17 +24,8 @@ public class CarManager implements CarService
     @Override
     public List<GetCarListResponse> getAll() {
         List<Car> cars = carRepository.findAll();
-        List<GetCarListResponse> responseList = new ArrayList<>();
-
-        for (Car car : cars){
-            GetCarListResponse response = new GetCarListResponse();
-            response.setId(car.getId());
-            response.setYear(car.getYear());
-            response.setName(car.getName());
-            response.setModel(car.getModel());
-            response.setReadyToUse(car.isReadyToUse());
-            response.setRentalPrice(car.getRentalPrice());
-        }
+        List<GetCarListResponse> responseList = cars.stream().map(car -> this.modelMapperService.forResponse()
+                .map(car, GetCarListResponse.class)).toList();
         return responseList;
     }
 

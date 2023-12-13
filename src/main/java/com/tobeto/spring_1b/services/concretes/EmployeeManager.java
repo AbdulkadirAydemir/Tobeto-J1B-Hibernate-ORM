@@ -25,15 +25,8 @@ public class EmployeeManager implements EmployeeService
     @Override
     public List<GetEmployeeListResponse> getAll() {
         List<Employee> employees = employeeRepository.findAll();
-        List<GetEmployeeListResponse> responseList = new ArrayList<>();
-
-        for (Employee employee : employees) {
-            GetEmployeeListResponse response = new GetEmployeeListResponse();
-            response.setId(employee.getId());
-            response.setFirstName(employee.getFirstName());
-            response.setLastName(employee.getLastName());
-            response.setBirthDate(employee.getBirthDate());
-        }
+        List<GetEmployeeListResponse> responseList = employees.stream().map(employee -> this.modelMapperService.forResponse()
+                .map(employee,GetEmployeeListResponse.class)).toList();
         return responseList;
     }
 

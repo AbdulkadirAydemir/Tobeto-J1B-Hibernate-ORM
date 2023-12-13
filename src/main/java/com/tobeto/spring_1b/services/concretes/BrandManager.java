@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -23,15 +24,10 @@ public class BrandManager implements BrandService {
     @Override
     public List<GetBrandListResponse> getAll() {
         List<Brand> brands = brandRepository.findAll();
-        List<GetBrandListResponse> responseList = new ArrayList<>();
 
-        for (Brand brand : brands) {
-            GetBrandListResponse response = new GetBrandListResponse();
-            response.setId(brand.getId());
-            response.setName(brand.getName());
-            response.setCountry(brand.getCountry());
-            responseList.add(response);
-        }
+        List<GetBrandListResponse> responseList = brands.stream().map(brand -> this.modelMapperService.forResponse()
+                .map(brand, GetBrandListResponse.class)).toList();
+
         return responseList;
     }
 
@@ -47,12 +43,12 @@ public class BrandManager implements BrandService {
 
     @Override
     public void add(AddBrandRequest request) {
-        Brand brand = this.modelMapperService.forRequest().map(request,Brand.class);
+        Brand brand = this.modelMapperService.forRequest().map(request, Brand.class);
     }
 
     @Override
     public void update(int id, UpdateBrandRequest updateBrandRequest) {
-        Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest,Brand.class);
+        Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
     }
 
     @Override
@@ -77,7 +73,7 @@ public class BrandManager implements BrandService {
         List<Brand> brands = brandRepository.findByCountryStartingWith(country + "%");
         List<GetBrandListResponse> response = new ArrayList<>();
 
-        for (Brand brand:brands) {
+        for (Brand brand : brands) {
             response.add(new GetBrandListResponse(brand.getCountry()));
         }
         return response;
@@ -89,7 +85,7 @@ public class BrandManager implements BrandService {
     }
 
     @Override
-    public List<Brand> search1(String country){
+    public List<Brand> search1(String country) {
         return brandRepository.search1(country);
     }
 }
