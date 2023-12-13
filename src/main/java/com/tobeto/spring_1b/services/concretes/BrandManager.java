@@ -1,5 +1,6 @@
 package com.tobeto.spring_1b.services.concretes;
 
+import com.tobeto.spring_1b.core.utilities.mappers.ModelMapperService;
 import com.tobeto.spring_1b.entities.Brand;
 import com.tobeto.spring_1b.repositories.BrandRepository;
 import com.tobeto.spring_1b.services.abstracts.BrandService;
@@ -13,10 +14,11 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class BrandManager implements BrandService {
     private final BrandRepository brandRepository;
+    private ModelMapperService modelMapperService;
 
     @Override
     public List<GetBrandListResponse> getAll() {
@@ -45,20 +47,12 @@ public class BrandManager implements BrandService {
 
     @Override
     public void add(AddBrandRequest request) {
-        Brand brand = new Brand();
-        brand.setName(request.getName());
-        brand.setCountry(request.getCountry());
-        brandRepository.save(brand);
+        Brand brand = this.modelMapperService.forRequest().map(request,Brand.class);
     }
 
     @Override
     public void update(int id, UpdateBrandRequest updateBrandRequest) {
-        Brand brand = new Brand();
-        brandRepository.findById(brand.getId()).orElseThrow();
-        brand.setId(updateBrandRequest.getId());
-        brand.setName(updateBrandRequest.getName());
-        brand.setCountry(updateBrandRequest.getCountry());
-        brandRepository.save(brand);
+        Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest,Brand.class);
     }
 
     @Override

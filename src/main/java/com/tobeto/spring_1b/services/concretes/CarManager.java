@@ -1,5 +1,6 @@
 package com.tobeto.spring_1b.services.concretes;
 
+import com.tobeto.spring_1b.core.utilities.mappers.ModelMapperService;
 import com.tobeto.spring_1b.entities.Car;
 import com.tobeto.spring_1b.repositories.CarRepository;
 import com.tobeto.spring_1b.services.abstracts.CarService;
@@ -18,6 +19,7 @@ import java.util.List;
 public class CarManager implements CarService
 {
     private final CarRepository carRepository;
+    private ModelMapperService modelMapperService;
 
     @Override
     public List<GetCarListResponse> getAll() {
@@ -52,26 +54,12 @@ public class CarManager implements CarService
 
     @Override
     public void add(AddCarRequest request) {
-        Car car = new Car();
-        car.setYear(request.getYear());
-        car.setName(request.getName());
-        car.setModel(request.getModel());
-        car.setReadyToUse(request.isReadyToUse());
-        car.setRentalPrice(request.getRentalPrice());
-        carRepository.save(car);
+        Car car = this.modelMapperService.forRequest().map(request,Car.class);
     }
 
     @Override
     public void update(int id, UpdateCarRequest updateCarRequest) {
-        Car car = new Car();
-        carRepository.findById(id).orElseThrow();
-        car.setId(updateCarRequest.getId());
-        car.setName(updateCarRequest.getName());
-        car.setModel(updateCarRequest.getModel());
-        car.setYear(updateCarRequest.getYear());
-        car.setReadyToUse(updateCarRequest.isReadyToUse());
-        car.setRentalPrice(updateCarRequest.getRentalPrice());
-        carRepository.save(car);
+        Car car = this.modelMapperService.forRequest().map(updateCarRequest,Car.class);
     }
 
     @Override

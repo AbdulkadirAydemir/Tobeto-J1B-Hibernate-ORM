@@ -1,5 +1,7 @@
 package com.tobeto.spring_1b.services.concretes;
 
+import com.tobeto.spring_1b.core.utilities.mappers.ModelMapperManager;
+import com.tobeto.spring_1b.core.utilities.mappers.ModelMapperService;
 import com.tobeto.spring_1b.entities.Employee;
 import com.tobeto.spring_1b.repositories.EmployeeRepository;
 import com.tobeto.spring_1b.services.abstracts.EmployeeService;
@@ -18,6 +20,7 @@ import java.util.List;
 public class EmployeeManager implements EmployeeService
 {
     private final EmployeeRepository employeeRepository;
+    private ModelMapperService modelMapperService;
 
     @Override
     public List<GetEmployeeListResponse> getAll() {
@@ -47,22 +50,12 @@ public class EmployeeManager implements EmployeeService
 
     @Override
     public void add(AddEmployeeRequest request) {
-        Employee employee = new Employee();
-        employee.setFirstName(request.getFirstName());
-        employee.setLastName(request.getLastName());
-        employee.setBirthDate(request.getBirthDate());
-        employeeRepository.save(employee);
+        Employee employee = this.modelMapperService.forRequest().map(request,Employee.class);
     }
 
     @Override
     public void update(int id, UpdateEmployeeRequest updateEmployeeRequest) {
-        Employee employee = new Employee();
-        employeeRepository.findById(id).orElseThrow();
-        employee.setId(updateEmployeeRequest.getId());
-        employee.setFirstName(updateEmployeeRequest.getFirstName());
-        employee.setLastName(updateEmployeeRequest.getLastName());
-        employee.setBirthDate(updateEmployeeRequest.getBirthDate());
-        employeeRepository.save(employee);
+        Employee employee = this.modelMapperService.forRequest().map(updateEmployeeRequest,Employee.class);
     }
 
     @Override

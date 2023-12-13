@@ -1,5 +1,6 @@
 package com.tobeto.spring_1b.services.concretes;
 
+import com.tobeto.spring_1b.core.utilities.mappers.ModelMapperService;
 import com.tobeto.spring_1b.entities.Customer;
 import com.tobeto.spring_1b.repositories.CustomerRepository;
 import com.tobeto.spring_1b.services.abstracts.CustomerService;
@@ -18,6 +19,7 @@ import java.util.List;
 public class CustomerManager implements CustomerService
 {
     private final CustomerRepository customerRepository;
+    private ModelMapperService modelMapperService;
 
     @Override
     public List<GetCustomerListResponse> getAll() {
@@ -53,28 +55,12 @@ public class CustomerManager implements CustomerService
 
     @Override
     public void add(AddCustomerRequest request) {
-        Customer customer = new Customer();
-        customer.setName(request.getName());
-        customer.setPhone(request.getPhone());
-        customer.setEmail(request.getEmail());
-        customer.setAddress(request.getAddress());
-        customer.setCarLicense(request.getCarLicense());
-        customer.setPhone(request.getPhone());
-        customerRepository.save(customer);
+       Customer customer = this.modelMapperService.forRequest().map(request,Customer.class);
     }
 
     @Override
     public void update(int id, UpdateCustomerRequest updateCustomerRequest) {
-        Customer customer = new Customer();
-        customerRepository.findById(id).orElseThrow();
-        customer.setId(updateCustomerRequest.getId());
-        customer.setName(updateCustomerRequest.getName());
-        customer.setSurname(updateCustomerRequest.getSurname());
-        customer.setAddress(updateCustomerRequest.getAddress());
-        customer.setPhone(updateCustomerRequest.getPhone());
-        customer.setEmail(updateCustomerRequest.getEmail());
-        customer.setCarLicense(updateCustomerRequest.getCarLicense());
-        customerRepository.save(customer);
+        Customer customer = this.modelMapperService.forRequest().map(updateCustomerRequest,Customer.class);
     }
 
     @Override

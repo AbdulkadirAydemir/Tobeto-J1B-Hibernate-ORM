@@ -1,5 +1,6 @@
 package com.tobeto.spring_1b.services.concretes;
 
+import com.tobeto.spring_1b.core.utilities.mappers.ModelMapperService;
 import com.tobeto.spring_1b.entities.Rental;
 import com.tobeto.spring_1b.repositories.RentalRepository;
 import com.tobeto.spring_1b.services.abstracts.RentalService;
@@ -18,6 +19,7 @@ import java.util.List;
 public class RentalManager implements RentalService
 {
     private final RentalRepository rentalRepository;
+    private ModelMapperService modelMapperService;
 
     @Override
     public List<GetRentalListResponse> getAll() {
@@ -47,22 +49,12 @@ public class RentalManager implements RentalService
 
     @Override
     public void add(AddRentalRequest request) {
-        Rental rental = new Rental();
-        rental.setStartDate(request.getStartDate());
-        rental.setEndDate(request.getEndDate());
-        rental.setTotalPrice(Integer.parseInt(request.getTotalPrice()));
-        rentalRepository.save(rental);
+        Rental rental = this.modelMapperService.forRequest().map(request,Rental.class);
     }
 
     @Override
     public void update(int id, UpdateRentalRequest updateRentalRequest) {
-        Rental rental = new Rental();
-        rentalRepository.findById(id).orElseThrow();
-        rental.setId(updateRentalRequest.getId());
-        rental.setStartDate(updateRentalRequest.getStartDate());
-        rental.setEndDate(updateRentalRequest.getEndDate());
-        rental.setTotalPrice(Integer.parseInt(updateRentalRequest.getTotalPrice()));
-        rentalRepository.save(rental);
+        Rental rental = this.modelMapperService.forRequest().map(updateRentalRequest,Rental.class);
     }
 
     @Override
