@@ -40,11 +40,13 @@ public class CustomerManager implements CustomerService
     @Override
     public void add(AddCustomerRequest request) {
        Customer customer = this.modelMapperService.forRequest().map(request,Customer.class);
+       this.customerRepository.save(customer);
     }
 
     @Override
     public void update(int id, UpdateCustomerRequest updateCustomerRequest) {
         Customer customer = this.modelMapperService.forRequest().map(updateCustomerRequest,Customer.class);
+        this.customerRepository.save(customer);
     }
 
     @Override

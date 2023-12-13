@@ -40,11 +40,13 @@ public class CarManager implements CarService
     @Override
     public void add(AddCarRequest request) {
         Car car = this.modelMapperService.forRequest().map(request,Car.class);
+        this.carRepository.save(car);
     }
 
     @Override
     public void update(int id, UpdateCarRequest updateCarRequest) {
         Car car = this.modelMapperService.forRequest().map(updateCarRequest,Car.class);
+        this.carRepository.save(car);
     }
 
     @Override

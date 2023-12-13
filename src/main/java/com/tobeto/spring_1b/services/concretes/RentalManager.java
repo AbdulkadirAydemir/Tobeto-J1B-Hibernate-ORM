@@ -40,11 +40,13 @@ public class RentalManager implements RentalService
     @Override
     public void add(AddRentalRequest request) {
         Rental rental = this.modelMapperService.forRequest().map(request,Rental.class);
+        this.rentalRepository.save(rental);
     }
 
     @Override
     public void update(int id, UpdateRentalRequest updateRentalRequest) {
         Rental rental = this.modelMapperService.forRequest().map(updateRentalRequest,Rental.class);
+        this.rentalRepository.save(rental);
     }
 
     @Override

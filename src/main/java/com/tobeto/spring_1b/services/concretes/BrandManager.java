@@ -42,11 +42,13 @@ public class BrandManager implements BrandService {
     @Override
     public void add(AddBrandRequest request) {
         Brand brand = this.modelMapperService.forRequest().map(request, Brand.class);
+        this.brandRepository.save(brand);
     }
 
     @Override
     public void update(int id, UpdateBrandRequest updateBrandRequest) {
         Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
+        this.brandRepository.save(brand);
     }
 
     @Override
@@ -58,6 +60,7 @@ public class BrandManager implements BrandService {
     @Override
     public List<GetBrandListResponse> getByName(String name) {
         List<Brand> brands = brandRepository.findByNameContaining("%" + name + "%");
+
         List<GetBrandListResponse> response = new ArrayList<>();
 
         for (Brand brand : brands) {
