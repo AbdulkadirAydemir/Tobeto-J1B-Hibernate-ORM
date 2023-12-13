@@ -33,13 +33,7 @@ public class CustomerManager implements CustomerService
     public GetCustomerResponse getById(int id) {
         Customer customer = customerRepository.findById(id).orElseThrow();
 
-        GetCustomerResponse response = new GetCustomerResponse();
-        response.setName(customer.getName());
-        response.setPhone(customer.getPhone());
-        response.setEmail(customer.getEmail());
-        response.setAddress(customer.getAddress());
-        response.setCarLicense(customer.getCarLicense());
-        response.setPhone(customer.getPhone());
+        GetCustomerResponse response = this.modelMapperService.forResponse().map(customer, GetCustomerResponse.class);
         return response;
     }
 

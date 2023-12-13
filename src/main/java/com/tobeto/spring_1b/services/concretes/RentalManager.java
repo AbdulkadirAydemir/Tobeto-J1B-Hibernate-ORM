@@ -33,10 +33,7 @@ public class RentalManager implements RentalService
     public GetRentalResponse getById(int id) {
         Rental rental = rentalRepository.findById(id).orElseThrow();
 
-        GetRentalResponse response = new GetRentalResponse();
-        response.setStartDate(rental.getStartDate());
-        response.setEndDate(rental.getEndDate());
-        response.setTotalPrice(String.valueOf(rental.getTotalPrice()));
+        GetRentalResponse response = this.modelMapperService.forResponse().map(rental,GetRentalResponse.class);
         return response;
     }
 

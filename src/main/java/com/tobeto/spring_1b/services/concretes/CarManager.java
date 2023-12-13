@@ -33,13 +33,7 @@ public class CarManager implements CarService
     public GetCarResponse getById(int id) {
         Car car = carRepository.findById(id).orElseThrow();
 
-        GetCarResponse response = new GetCarResponse();
-        response.setYear(car.getYear());
-        response.setName(car.getName());
-        response.setModel(car.getModel());
-        response.setReadyToUse(car.isReadyToUse());
-        response.setRentalPrice(car.getRentalPrice());
-
+        GetCarResponse response = this.modelMapperService.forResponse().map(car ,GetCarResponse.class);
         return response;
     }
 

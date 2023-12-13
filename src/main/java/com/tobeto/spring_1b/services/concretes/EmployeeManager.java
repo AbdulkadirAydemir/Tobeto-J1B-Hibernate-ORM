@@ -34,10 +34,7 @@ public class EmployeeManager implements EmployeeService
     public GetEmployeeResponse getById(int id) {
         Employee employee = employeeRepository.findById(id).orElseThrow();
 
-        GetEmployeeResponse response = new GetEmployeeResponse();
-        response.setFirstName(employee.getFirstName());
-        response.setLastName(employee.getLastName());
-        response.setBirthDate(employee.getBirthDate());
+        GetEmployeeResponse response = this.modelMapperService.forResponse().map(employee,GetEmployeeResponse.class);
         return response;
     }
 

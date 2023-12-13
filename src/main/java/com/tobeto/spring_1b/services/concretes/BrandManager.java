@@ -35,9 +35,7 @@ public class BrandManager implements BrandService {
     public GetBrandResponse getById(int id) {
         Brand brand = brandRepository.findById(id).orElseThrow();
 
-        GetBrandResponse response = new GetBrandResponse();
-        response.setName(brand.getName());
-        response.setCountry(brand.getCountry());
+        GetBrandResponse response = this.modelMapperService.forResponse().map(brand,GetBrandResponse.class);
         return response;
     }
 
